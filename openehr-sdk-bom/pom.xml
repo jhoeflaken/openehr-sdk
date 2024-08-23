@@ -11,12 +11,27 @@
     </parent>
 
     <artifactId>openehr-sdk-bom</artifactId>
+    <packaging>pom</packaging>
 
     <properties>
+        <spring-boot.version>3.3.3</spring-boot.version>
+        <jakarta-validation.version>3.1.0</jakarta-validation.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.validation</groupId>
+                <artifactId>jakarta.validation-api</artifactId>
+                <version>${jakarta-validation.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 </project>

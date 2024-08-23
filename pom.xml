@@ -21,5 +21,6 @@
     <modules>
         <module>openehr-sdk-bom</module>
         <module>openehr-sdk-parent</module>
+        <module>openehr-base</module>
     </modules>
 </project>

@@ -11,6 +11,7 @@
     </parent>
 
     <artifactId>openehr-sdk-parent</artifactId>
+    <packaging>pom</packaging>
 
     <properties>
     </properties>

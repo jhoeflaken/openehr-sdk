@@ -6,8 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="openehr-sdk-bom" />
-        <module name="openehr-sdk-parent" />
+        <module name="openehr-base" />
       </profile>
     </annotationProcessing>
   </component>
