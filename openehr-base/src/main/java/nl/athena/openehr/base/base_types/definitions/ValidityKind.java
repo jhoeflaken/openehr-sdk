@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 
 /**
  * An enumeration of three values that may commonly occur in constraint models.
- *
+ * <p>
  * Use as the type of any attribute within this model, which expresses constraint on some attribute in a class in a
  * reference model. For example to indicate validity of Date/Time fields.
  */
