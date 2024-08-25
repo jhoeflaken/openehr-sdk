@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="openehr-base" />
+        <module name="openehr-rm" />
       </profile>
     </annotationProcessing>
   </component>
