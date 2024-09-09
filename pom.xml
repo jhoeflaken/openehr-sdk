@@ -23,5 +23,15 @@
         <module>openehr-sdk-parent</module>
         <module>openehr-base</module>
         <module>openehr-rm</module>
+        <module>openehr-term</module>
+        <module>openehr-query</module>
+        <module>openehr-am</module>
+        <module>openehr-lang</module>
+        <module>openehr-sm</module>
+        <module>openehr-cds</module>
+        <module>openehr-proc</module>
+        <module>openehr-its-rest</module>
+        <module>openehr-sdt</module>
+        <module>openehr-bmm</module>
     </modules>
 </project>

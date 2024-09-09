@@ -1,14 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/openehr-am/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/openehr-am/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/openehr-base/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/openehr-base/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/openehr-bmm/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/openehr-bmm/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/openehr-cds/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/openehr-cds/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/openehr-its-rest/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/openehr-its-rest/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/openehr-lang/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/openehr-lang/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/openehr-proc/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/openehr-proc/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/openehr-query/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/openehr-query/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/openehr-rm/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/openehr-rm/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/openehr-sdk-bom/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/openehr-sdk-bom/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/openehr-sdk-parent/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/openehr-sdk-parent/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/openehr-sdt/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/openehr-sdt/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/openehr-sm/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/openehr-sm/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/openehr-term/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/openehr-term/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
   </component>

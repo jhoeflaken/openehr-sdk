@@ -6,8 +6,18 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="openehr-base" />
+        <module name="openehr-am" />
+        <module name="openehr-its-rest" />
+        <module name="openehr-proc" />
+        <module name="openehr-sm" />
         <module name="openehr-rm" />
+        <module name="openehr-term" />
+        <module name="openehr-query" />
+        <module name="openehr-base" />
+        <module name="openehr-lang" />
+        <module name="openehr-sdt" />
+        <module name="openehr-cds" />
+        <module name="openehr-bmm" />
       </profile>
     </annotationProcessing>
   </component>
