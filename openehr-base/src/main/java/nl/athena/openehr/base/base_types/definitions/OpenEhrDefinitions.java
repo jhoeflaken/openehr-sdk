@@ -1,7 +1,9 @@
 package nl.athena.openehr.base.base_types.definitions;
 
 /**
- * The OpenEHR definitions, which includes the basic definitions.
+ * The OpenEHR definitions, which includes the basic definitions. See
+ * <a href="https://specifications.openehr.org/releases/BASE/development/base_types.html#_openehr_definitions_class">
+ *     OPENEHR_DEFINITIONS</a>
  */
 public interface OpenEhrDefinitions extends BasicDefinitions {
 

@@ -38,6 +38,13 @@
                 <artifactId>commons-lang3</artifactId>
                 <version>${commons-lang3.version}</version>
             </dependency>
+
+            <!-- The SDK modules -->
+            <dependency>
+                <groupId>nl.athena.openehr</groupId>
+                <artifactId>openehr-sdk-rm</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 </project>

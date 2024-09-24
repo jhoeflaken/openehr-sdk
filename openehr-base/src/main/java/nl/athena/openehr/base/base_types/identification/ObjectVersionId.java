@@ -5,6 +5,10 @@ import jakarta.validation.constraints.NotNull;
 public class ObjectVersionId extends UidBasedId {
 
 
+    public ObjectVersionId(String theValue) {
+        super(theValue);
+    }
+
     public Uid objectId() {
         final String[] parts = value.split("::");
         return new Uid(parts[0]);
@@ -29,7 +33,7 @@ public class ObjectVersionId extends UidBasedId {
     }
 
     public Boolean isBranch() {
-        return ;
+        return false;
     }
 
 }

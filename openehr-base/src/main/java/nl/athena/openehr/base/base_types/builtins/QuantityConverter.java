@@ -1,6 +1,7 @@
 package nl.athena.openehr.base.base_types.builtins;
 
 import jakarta.validation.constraints.NotNull;
+import nl.athena.openehr.base.foundation_types.terminology.TerminologyCode;
 
 /**
  * Quantity converter.

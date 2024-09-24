@@ -1,7 +1,9 @@
 package nl.athena.openehr.base.base_types.definitions;
 
 /**
- * The OpenEHR basic definitions. Defines globally used constant values.
+ * The OpenEHR basic definitions. Defines globally used constant values. See
+ * <a href="https://specifications.openehr.org/releases/BASE/development/base_types.html#_basic_definitions_class">
+ *     BASIC_DEFINITIONS</a> class
  */
 public interface BasicDefinitions {
 

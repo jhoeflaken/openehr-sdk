@@ -5,12 +5,48 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
  * Status of a versioned artefact, as one of a number of possible values: uncontrolled, prerelease, release, build.
+ * See <a href="https://specifications.openehr.org/releases/BASE/development/base_types.html#_version_status_enumeration">
+ *     VERSION_STATUS</a> enumeration.
  */
 public enum VersionStatus {
+    /**
+     *
+     * Value representing a version which is 'unstable', i.e. contains an unknown size of change with respect to its
+     * base version. Rendered with the build number as a string in the form N.M.P-alpha.B e.g. 2.0.1-alpha.154.
+     * <p />
+     * The {0} is the version number in major.minor.patch format, and {1} is the build number.
+     */
     ALPHA("alpha", "{0}-alpha.{1}"),
+
+    /**
+     * Value representing a version which is 'beta', i.e. contains an unknown but reducing size of change with respect
+     * to its base version. Rendered with the build number as a string in the form N.M.P-beta.B e.g. 2.0.1-beta.154.
+     * <p />
+     * The {0} is the version number in major.minor.patch format, and {1} is the build number.
+     */
     BETA("beta", " {0}-beta.{1}"),
+
+    /**
+     * Value representing a version which is 'release candidate', i.e. contains only patch-level changes on the base
+     * version. Rendered as a string as N.M.P-rc.B e.g. 2.0.1-rc.27.
+     * <p />
+     * The {0} is the version number in major.minor.patch format, and {1} is the build number.
+     */
     RELEASE_CANDIDATE("release_candidate", "{0}-rc.{1}"),
+
+    /**
+     * Value representing a version which is 'released', i.e. is the definitive base version. N.M.P e.g. 2.0.1.
+     * <p />
+     * The {0} is the version number in major.minor.patch format.
+     */
     RELEASED("released", "{0}"),
+
+    /**
+     * Value representing a version which is a build of the current base release. Rendered with the build number as a
+     * string in the form N.M.P+B e.g. 2.0.1+33.
+     * <p />
+     * The {0} is the version number in major.minor.patch format, and {1} is the build number.
+     */
     BUILD("build", "{0}+{1}");
 
     private final String value;
@@ -35,7 +71,8 @@ public enum VersionStatus {
     }
 
     /**
-     * Returns the official OpenEHR value of the enumeration.
+     * Returns the official OpenEHR value of the enumeration. This is the value that should be used in the JSON and
+     * therefore is annotated with {@link JsonValue}.
      *
      * @return The official OpenEHR value of the enumeration.
      */
@@ -54,7 +91,8 @@ public enum VersionStatus {
     }
 
     /**
-     * Creates a {@link VersionStatus} from the given value string.
+     * Creates a {@link VersionStatus} from the given value string. This method is used by Jackson during JSON
+     * deserialization.
      *
      * @param theValue The OpenEHR version status string value.
      * @return The {@link VersionStatus} for the specified value.
