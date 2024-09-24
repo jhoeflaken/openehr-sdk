@@ -2,12 +2,17 @@ package nl.athena.openehr.base.base_types.definitions;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import jakarta.xml.bind.annotation.XmlEnum;
+import jakarta.xml.bind.annotation.XmlEnumValue;
+import jakarta.xml.bind.annotation.XmlType;
 
 /**
  * Status of a versioned artefact, as one of a number of possible values: uncontrolled, prerelease, release, build.
  * See <a href="https://specifications.openehr.org/releases/BASE/development/base_types.html#_version_status_enumeration">
  *     VERSION_STATUS</a> enumeration.
  */
+@XmlType(name = "VERSION_STATUS")
+@XmlEnum
 public enum VersionStatus {
     /**
      *
@@ -16,6 +21,7 @@ public enum VersionStatus {
      * <p />
      * The {0} is the version number in major.minor.patch format, and {1} is the build number.
      */
+    @XmlEnumValue("alpha")
     ALPHA("alpha", "{0}-alpha.{1}"),
 
     /**
@@ -24,6 +30,7 @@ public enum VersionStatus {
      * <p />
      * The {0} is the version number in major.minor.patch format, and {1} is the build number.
      */
+    @XmlEnumValue("beta")
     BETA("beta", " {0}-beta.{1}"),
 
     /**
@@ -32,6 +39,7 @@ public enum VersionStatus {
      * <p />
      * The {0} is the version number in major.minor.patch format, and {1} is the build number.
      */
+    @XmlEnumValue("release_candidate")
     RELEASE_CANDIDATE("release_candidate", "{0}-rc.{1}"),
 
     /**
@@ -39,6 +47,7 @@ public enum VersionStatus {
      * <p />
      * The {0} is the version number in major.minor.patch format.
      */
+    @XmlEnumValue("released")
     RELEASED("released", "{0}"),
 
     /**
@@ -47,6 +56,7 @@ public enum VersionStatus {
      * <p />
      * The {0} is the version number in major.minor.patch format, and {1} is the build number.
      */
+    @XmlEnumValue("build")
     BUILD("build", "{0}+{1}");
 
     private final String value;

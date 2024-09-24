@@ -3,6 +3,9 @@ package nl.athena.openehr.base.base_types.definitions;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.validation.constraints.NotNull;
+import jakarta.xml.bind.annotation.XmlEnum;
+import jakarta.xml.bind.annotation.XmlEnumValue;
+import jakarta.xml.bind.annotation.XmlType;
 
 /**
  * An enumeration of three values that may commonly occur in constraint models.
@@ -12,20 +15,25 @@ import jakarta.validation.constraints.NotNull;
  * <a href="https://specifications.openehr.org/releases/BASE/development/base_types.html#_validity_kind_enumeration">
  *     VALIDITY_KIND</a> enumeration.
  */
+@XmlType(name = "VALIDITY_KIND")
+@XmlEnum
 public enum ValidityKind {
     /**
      * Constant to indicate mandatory presence of something.
      */
+    @XmlEnumValue("mandatory")
     MANDATORY("mandatory"),
 
     /**
      * Constant to indicate optional presence of something.
      */
+    @XmlEnumValue("optional")
     OPTIONAL("optional"),
 
     /**
      * Constant to indicate disallowed presence of something.
      */
+    @XmlEnumValue("prohibited")
     PROHIBITED("prohibited");
 
     private final String value;
