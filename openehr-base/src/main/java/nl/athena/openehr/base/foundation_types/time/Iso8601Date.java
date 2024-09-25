@@ -6,6 +6,15 @@ public class Iso8601Date extends Iso8601Type {
     private int day;
 
     /**
+     * Constructor for Iso8601Type.
+     *
+     * @param theValue The ISO8601 value.
+     */
+    public Iso8601Date(String theValue) {
+        super(theValue);
+    }
+
+    /**
      * Extract the year part of the date as an Integer.
      *
      * @return Year part of the date as an Integer.

@@ -1,6 +1,7 @@
 package nl.athena.openehr.base.foundation_types.time;
 
 import java.time.YearMonth;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -10,6 +11,24 @@ import java.util.regex.Pattern;
  *     TimeDefinitions</a> interface.
  */
 public interface TimeDefinitions {
+
+    // ISO8601 date pattern.
+    String ISO_8601_DATE_REGEX = "^(\\d{4})(-?(0[1-9]|1[0-2])(-?(0[1-9]|[12]\\d|3[01]))?)?$";
+    Pattern ISO_8601_DATE_PATTERN = Pattern.compile(ISO_8601_DATE_REGEX);
+
+    // ISO8601 time pattern.
+    String ISO_8601_TIME_REGEX = "^([01]\\d|2[0-3])(:?([0-5]\\d)(:?([0-5]\\d)([.,]\\d+)?)?)?(?:Z|([+-])(\\d{2})(:?\\d{2})?)?$";
+    Pattern ISO_8601_TIME_PATTERN = Pattern.compile(ISO_8601_TIME_REGEX);
+
+    // ISO8601 date-time pattern.
+    String ISO_8601_DATE_TIME_REGEX = "^\\d{4}-?(0[1-9]|1(0-2)-?(0[1-9]|[12]\\d|3[01])T"  +
+            "([01]\\d|2[0-3])(:?([0-5]\\d)(:?([0-5]\\d)([.,]\\d+)?)?)?(?:Z|([+-])(\\d{2})(:?\\d{2})?)?)$" ;
+    Pattern ISO_8601_DATE_TIME_PATTERN = Pattern.compile(ISO_8601_DATE_TIME_REGEX);
+
+    // ISO8601 duration pattern.
+    String ISO_8601_DURATION_REGEX = "^P(?:([0-9]+)Y)?(?:([0-9]+)M)?(?:([0-9]+)D)?" +
+            "(?:T(?:([0-9]+)H)?(?:([0-9]+)M)?(?:([0-9]+)([.,][0-9]+)?S)?)?$";
+    Pattern ISO_8601_DURATION_PATTERN = Pattern.compile(ISO_8601_DURATION_REGEX);
 
     int SECONDS_IN_MINUTE = 60;
     int MINUTES_IN_HOUR = 60;
@@ -56,20 +75,35 @@ public interface TimeDefinitions {
         return theFractionalSecond >= 0.0 && theFractionalSecond < 1.0;
     }
 
-    default boolean validIso8601DDate(final String theIso8601Date) {
+    default boolean validIso8601Date(final String theIso8601Date) {
+        final Matcher matcher = ISO_8601_DATE_PATTERN.matcher(theIso8601Date);
+        if (!matcher.matches()) {
+            return false;
+        }
+
+        int year = Integer.parseInt(matcher.group(1));
+        int month = matcher.group(3)  != null ? Integer.parseInt(matcher.group(3)) : -1;
+        int day = matcher.group(5) != null ? Integer.parseInt(matcher.group(5)) : -1;
+
+        // If year (required), month (optional) and day (optional) is specified we need to
+        // check if the day is valid.
+        if (month != -1 && day != -1) {
+            return validDay(year, month, day);
+        }
+
         return true;
     }
 
     default boolean validIso8601Time(final String theIso8601Time) {
-        return true;
+        return ISO_8601_TIME_PATTERN.matcher(theIso8601Time).matches();
     }
 
     default boolean validIso8601DateTime(final String theIso8601DateTime) {
-        return true;
+        return ISO_8601_DATE_TIME_PATTERN.matcher(theIso8601DateTime).matches();
     }
 
     default boolean validIso8601Duration(final String theIso8601Duration) {
-        return true;
+        return ISO_8601_DURATION_PATTERN.matcher(theIso8601Duration).matches();
     }
 
 }
