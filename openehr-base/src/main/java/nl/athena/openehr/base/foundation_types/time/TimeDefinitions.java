@@ -17,7 +17,8 @@ public interface TimeDefinitions {
     Pattern ISO_8601_DATE_PATTERN = Pattern.compile(ISO_8601_DATE_REGEX);
 
     // ISO8601 time pattern.
-    String ISO_8601_TIME_REGEX = "^([01]\\d|2[0-3])(:?([0-5]\\d)(:?([0-5]\\d)([.,]\\d+)?)?)?(?:Z|([+-])(\\d{2})(:?\\d{2})?)?$";
+    String ISO_8601_TIME_REGEX = "^([01]\\d|2[0-3])(:?([0-5]\\d)(:?([0-5]\\d)([.,]\\d{1,6})?)?)?" +
+            "(Z|([+-])([01]\\d|2[0-3])(:?([0-5]\\d)?)?)?$";
     Pattern ISO_8601_TIME_PATTERN = Pattern.compile(ISO_8601_TIME_REGEX);
 
     // ISO8601 date-time pattern.
