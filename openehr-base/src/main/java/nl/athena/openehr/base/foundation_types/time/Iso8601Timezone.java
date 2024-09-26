@@ -164,7 +164,7 @@ public class Iso8601Timezone extends Iso8601Type {
 
     @Override
     @SuppressWarnings("NullableProblems")
-    public int compareTo(Temporal theOther) {
+    public int compareTo(@NotNull Temporal theOther) {
         // Check if the other object is an instance of Iso8601Timezone.
         if (!(theOther instanceof Iso8601Timezone other)) {
             throw new IllegalArgumentException("Cannot compare Iso8601Timezone with " +
