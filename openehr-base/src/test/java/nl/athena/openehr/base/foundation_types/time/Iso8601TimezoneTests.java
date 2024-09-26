@@ -80,11 +80,62 @@ public class Iso8601TimezoneTests {
     void compareToNonIso8601TimezoneThrowsException() {
         Iso8601Timezone timezone = new Iso8601Timezone("+0200");
         assertThrows(IllegalArgumentException.class, () -> timezone.compareTo(new Temporal() {
+
             @Override
+            @SuppressWarnings("NullableProblems")
             public int compareTo(Temporal o) {
                 return 0;
             }
+
         }));
+    }
+
+    @Test
+    void asStringWithPositiveOffset() {
+        Iso8601Timezone timezone = new Iso8601Timezone("+0230");
+        assertEquals("+02:30", timezone.asString());
+    }
+
+    @Test
+    void asStringWithNegativeOffset() {
+        Iso8601Timezone timezone = new Iso8601Timezone("-0500");
+        assertEquals("-05:00", timezone.asString());
+    }
+
+    @Test
+    void asStringWithZ() {
+        Iso8601Timezone timezone = new Iso8601Timezone("Z");
+        assertEquals("+00:00", timezone.asString());
+    }
+
+    @Test
+    void isGmtWithZ() {
+        Iso8601Timezone timezone = new Iso8601Timezone("Z");
+        assertTrue(timezone.isUtc());
+    }
+
+    @Test
+    void isGmtWithPositiveOffset() {
+        Iso8601Timezone timezone = new Iso8601Timezone("+0230");
+        assertFalse(timezone.isUtc());
+    }
+
+    @Test
+    void isGmtWithNegativeOffset() {
+        Iso8601Timezone timezone = new Iso8601Timezone("-0500");
+        assertFalse(timezone.isUtc());
+    }
+
+    @Test
+    void isGmtWithNegative0000() {
+        Iso8601Timezone timezone = new Iso8601Timezone("-0000");
+        assertTrue(timezone.isUtc());
+    }
+
+    @Test
+    void isGmtWithPositive0000() {
+        Iso8601Timezone timezone = new Iso8601Timezone("+00:00");
+        assertTrue(timezone.isUtc());
     }
 
 }
