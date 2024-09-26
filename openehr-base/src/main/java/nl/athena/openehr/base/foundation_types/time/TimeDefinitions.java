@@ -22,8 +22,8 @@ public interface TimeDefinitions {
     Pattern ISO_8601_TIME_PATTERN = Pattern.compile(ISO_8601_TIME_REGEX);
 
     // ISO8601 date-time pattern.
-    String ISO_8601_DATE_TIME_REGEX = "^\\d{4}-?(0[1-9]|1(0-2)-?(0[1-9]|[12]\\d|3[01])T"  +
-            "([01]\\d|2[0-3])(:?([0-5]\\d)(:?([0-5]\\d)([.,]\\d+)?)?)?(?:Z|([+-])(\\d{2})(:?\\d{2})?)?)$" ;
+    String ISO_8601_DATE_TIME_REGEX = "^(\\d{4})(-?)(0[1-9]|1[0-2])(-?)(0[1-9]|[12]\\d|3[01])T([01]\\d|2[0-3])" +
+            "(:?([0-5]\\d)(:?([0-5]\\d)([.,]\\d{1,6})?)?)?(Z|([+-])([01]\\d|2[0-3])(:?([0-5]\\d)?)?)?$";
     Pattern ISO_8601_DATE_TIME_PATTERN = Pattern.compile(ISO_8601_DATE_TIME_REGEX);
 
     // ISO8601 duration pattern.
@@ -100,7 +100,22 @@ public interface TimeDefinitions {
     }
 
     default boolean validIso8601DateTime(final String theIso8601DateTime) {
-        return ISO_8601_DATE_TIME_PATTERN.matcher(theIso8601DateTime).matches();
+        final Matcher matcher = ISO_8601_DATE_TIME_PATTERN.matcher(theIso8601DateTime);
+        if (!matcher.matches()) {
+            return false;
+        }
+
+        int year = Integer.parseInt(matcher.group(1));
+        int month = matcher.group(3)  != null ? Integer.parseInt(matcher.group(3)) : -1;
+        int day = matcher.group(6) != null ? Integer.parseInt(matcher.group(5)) : -1;
+
+        // If year (required), month (optional) and day (optional) is specified we need to
+        // check if the day is valid.
+        if (month != -1 && day != -1) {
+            return validDay(year, month, day);
+        }
+
+        return true;
     }
 
     default boolean validIso8601Duration(final String theIso8601Duration) {
