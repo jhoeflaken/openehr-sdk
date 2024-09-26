@@ -19,4 +19,10 @@ public class Iso8601DateTime extends Iso8601Type {
     public boolean isExtended() {
         return false;
     }
+
+    @Override
+    public int compareTo(Temporal o) {
+        return 0;
+    }
+
 }

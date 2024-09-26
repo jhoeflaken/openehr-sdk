@@ -43,8 +43,9 @@ public class Iso8601Timezone extends Iso8601Type {
      *
      * @param theValue The ISO8601 value.
      */
-    public Iso8601Timezone(@NotNull final String theValue) {
+    public Iso8601Timezone(@NotNull String theValue) {
         super(theValue);
+
         final Matcher matcher = ISO_8601_TIMEZONE_PATTERN.matcher(theValue);
         if (matcher.matches()) {
             if (matcher.group(1).equals("Z")) {
@@ -78,43 +79,108 @@ public class Iso8601Timezone extends Iso8601Type {
         }
     }
 
+    /**
+     * Extract the hour part of timezone, as an Integer in the range 00 - 24.
+     * @return The hour part of timezone.
+     */
     public int hour() {
         return hour;
     }
 
+    /**
+     * Extract the minute part of timezone, as an Integer in the range 00 - 59. Usually either 0 or 30.
+     *
+     * @return The minute part of timezone.
+     */
     public int minute() {
         return minute;
     }
 
+    /**
+     * Extract the sign of the timezone, as an Integer as -1 or 1.
+     *
+     * @return The sign of the timezone.
+     */
     public int sign() {
         return sign;
     }
 
+    /**
+     * True if the minute part of the timezone is unknown.
+     *
+     * @return True if the minute part of the timezone is unknown.
+     */
     public boolean minuteUnknown() {
         return minuteUnknown;
     }
 
+    /**
+     * True if this timezone is partial, i.e. if minute part is missing.
+     *
+     * @return True if this timezone is partial.
+     */
     @Override
     public boolean isPartial() {
         return isPartial;
     }
 
+    /**
+     * True if this timezone is in the 'extended' form, i.e. uses ':' separator.
+     *
+     * @return True if this timezone is in the 'extended' form.
+     */
     @Override
     public boolean isExtended() {
         return isExtended;
     }
 
+    /**
+     * True if this timezone is UTC.
+     *
+     * @return True if this timezone is UTC.
+     */
     public boolean isGmt() {
         return hour == 0 && minute == 0;
     }
 
+    /**
+     * True if this timezone is UTC.
+     *
+     * @return True if this timezone is UTC.
+     */
     public boolean isUtc() {
         return isGmt();
     }
 
+    /**
+     * Return timezone string in extended format.
+     *
+     * @return The timezone string in extended format.
+     */
     public String asString() {
         final String s = sign == 1 ? "+" : "-";
         return String.format("%s%02d:%02d", s, hour, minute);
+    }
+
+    @Override
+    public int compareTo(Temporal theOther) {
+        // Check if the other object is an instance of Iso8601Timezone.
+        if (!(theOther instanceof Iso8601Timezone other)) {
+            throw new IllegalArgumentException("Cannot compare Iso8601Timezone with " +
+                    theOther.getClass().getSimpleName());
+        }
+
+        // Cast the other object to Iso8601Timezone and compare the values.
+        if (sign != other.sign) {
+            return sign - other.sign;
+        }
+
+        if (hour != other.hour) {
+            return hour - other.hour;
+        }
+
+        return minute - other.minute;
+
     }
 
 }

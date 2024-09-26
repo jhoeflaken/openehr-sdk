@@ -154,4 +154,8 @@ public class Iso8601Date extends Iso8601Type {
     }
 
 
+    @Override
+    public int compareTo(Temporal theObject) {
+        return 0;
+    }
 }
