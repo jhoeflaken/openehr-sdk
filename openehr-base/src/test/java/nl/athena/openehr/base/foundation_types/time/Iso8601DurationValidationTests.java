@@ -28,9 +28,7 @@ public class Iso8601DurationValidationTests {
         assertTrue(timeDefinitions.validIso8601Duration("P1Y2M3W"));
         assertTrue(timeDefinitions.validIso8601Duration("P1Y2M3W4DT5H6M7.123S"));
         assertTrue(timeDefinitions.validIso8601Duration("P1Y2M3W4DT5H6M7,123S"));
-
-//        assertTrue(timeDefinitions.validIso8601Duration("P5H6M7S"));
-
+        assertTrue(timeDefinitions.validIso8601Duration("PT5H6M7S"));
 
         // Invalid durations
         assertFalse(timeDefinitions.validIso8601Duration("P"));
@@ -40,6 +38,7 @@ public class Iso8601DurationValidationTests {
         assertFalse(timeDefinitions.validIso8601Duration("P1Y2M3W4DT5H6M7.1234S67")); // Too many fractional digits
         assertFalse(timeDefinitions.validIso8601Duration("P1Y2M3W4DT5H6M7,1234S67")); // Too many fractional digits
         assertFalse(timeDefinitions.validIso8601Duration("P1Y2M3W4DT5H6M7.123S8M")); // Invalid format
+        assertFalse(timeDefinitions.validIso8601Duration("P5H6M7S")); // Invalid format
     }
 
 }
