@@ -2,8 +2,7 @@ package nl.athena.openehr.base.foundation_types.time;
 
 import jakarta.validation.constraints.NotNull;
 
-import java.time.LocalDate;
-import java.time.Period;
+import java.time.YearMonth;
 import java.util.regex.Matcher;
 
 public class Iso8601Date extends Iso8601Type {
@@ -13,43 +12,52 @@ public class Iso8601Date extends Iso8601Type {
     private final int day;
     private final Iso8601Timezone timezone;
 
-    /**
-     * Constructor for new ISO-8601 date.
-     *
-     * @param theValue The ISO8601 value.
-     */
-    public Iso8601Date(@NotNull final String theValue) {
-        this(theValue, null);
+    public static Iso8601Date of(@NotNull final String value) {
+        return Iso8601Date.of(value, null);
     }
 
-    /**
-     * Constructor for new ISO-8601 date.
-     *
-     * @param theValue The ISO-8601 date.
-     * @param theTimezone The timezone.
-     */
-    public Iso8601Date(
-            @NotNull String theValue,
-            final Iso8601Timezone theTimezone) {
-        super(theValue);
-        timezone = theTimezone;
+    public static Iso8601Date of(
+            @NotNull final String theValue,
+            final Iso8601Timezone timezone) {
 
         final Matcher matcher = ISO_8601_DATE_PATTERN.matcher(theValue);
         if (!matcher.matches()) {
             throw new IllegalArgumentException("Invalid ISO8601 date: " + theValue);
         }
 
-        year = Integer.parseInt(matcher.group(1));
-        month = matcher.group(3)  != null ? Integer.parseInt(matcher.group(3)) : 0;
-        day = matcher.group(5) != null ? Integer.parseInt(matcher.group(5)) : 0;
+        int year = Integer.parseInt(matcher.group(1));
+        int month = matcher.group(3)  != null ? Integer.parseInt(matcher.group(3)) : 0;
+        int day = matcher.group(5) != null ? Integer.parseInt(matcher.group(5)) : 0;
 
         // If year (required), month (optional) and day (optional) is specified we need to
         // check if the day is valid.
         if (month != 0 && day != 0) {
-            if (!validDay(year, month, day)) {
+            final int daysInMonth = YearMonth.of(year, month).lengthOfMonth();
+            if (day <= 0 || day > daysInMonth) {
                 throw new IllegalArgumentException("Invalid ISO8601 date: " + theValue);
             }
         }
+
+        return new Iso8601Date(theValue, timezone, year, month, day);
+
+    }
+
+    /**
+     * Constructor for new ISO-8601 date.
+     *
+     * @param theValue The ISO8601 value.
+     */
+    public Iso8601Date(
+            @NotNull final String theValue,
+            final Iso8601Timezone theTimezone,
+            final int theYear,
+            final int theMonth,
+            final int theDay) {
+        super(theValue);
+        timezone = theTimezone;
+        year = theYear;
+        month = theMonth;
+        day = theDay;
     }
 
     /**
@@ -124,54 +132,30 @@ public class Iso8601Date extends Iso8601Type {
     /**
      * Add a duration to this date, returning a new date.
      *
-     * @param duration The duration to add.
+     * @param theDuration The duration to add.
      * @return A new date with the duration added.
      */
-    public Iso8601Date add(final Iso8601Duration duration) {
-        final LocalDate currentDate = LocalDate.of(year, month == 0 ? 1 : month, day == 0 ? 1 : day);
-        final Period period = Period.of(duration.years(), duration.months(), duration.days() + duration.weeks() * 7);
-        final LocalDate newDate = currentDate.plus(period);
-
-        return new Iso8601Date(newDate.toString(), timezone);
+    public Iso8601Date add(final Iso8601Duration theDuration) {
+        return null;
     }
 
     /**
      * Subtract a duration from this date, returning a new date.
      *
-     * @param duration The duration to subtract.
+     * @param theDuration The duration to subtract.
      * @return A new date with the duration subtracted.
      */
-    public Iso8601Date subtract(final Iso8601Duration duration) {
-        final LocalDate currentDate = LocalDate.of(year, month == 0 ? 1 : month, day == 0 ? 1 : day);
-        final Period period = Period.of(duration.years(), duration.months(), duration.days() + duration.weeks() * 7);
-        final LocalDate newDate = currentDate.minus(period);
-
-        return new Iso8601Date(newDate.toString(), timezone);
+    public Iso8601Date subtract(final Iso8601Duration theDuration) {
+        return null;
     }
 
     /**
      * Calculate the difference between this date and another date.
      *
-     * @param other The other date.
+     * @param theOther The other date.
      * @return The difference between this date and the other date.
      */
-    public Iso8601Duration diff(final Iso8601Date other) {
-        final LocalDate thisDate = LocalDate.of(year, month == 0 ? 1 : month, day == 0 ? 1 : day);
-        final LocalDate otherDate = LocalDate.of(other.year(), other.month() == 0 ? 1 : other.month(), other.day() == 0 ? 1 : other.day());
-        final Period period = Period.between(otherDate, thisDate);
-
-        StringBuilder duration = new StringBuilder("P");
-
-        if (period.getYears() != 0) {
-            duration.append(period.getYears()).append("Y");
-        }
-        if (period.getMonths() != 0) {
-            duration.append(period.getMonths()).append("M");
-        }
-        if (period.getDays() != 0) {
-            duration.append(period.getDays()).append("D");
-        }
-
+    public Iso8601Duration diff(final Iso8601Date theOther) {
         return null;
     }
 
@@ -193,34 +177,22 @@ public class Iso8601Date extends Iso8601Type {
      *      </li>
      * </ul>
      *
-     * @param duration The nominal duration to add.
+     * @param theDuration The nominal duration to add.
      * @return A new date with the nominal duration added.
      */
-    public Iso8601Date addNominal(final Iso8601Duration duration) {
-        final LocalDate currentDate = LocalDate.of(year, month == 0 ? 1 : month, day == 0 ? 1 : day);
-        final LocalDate newDate = currentDate
-                .plusYears(duration.years())
-                .plusMonths(duration.months())
-                .plusDays(duration.days() + duration.weeks() * 7L);
-
-        return new Iso8601Date(newDate.toString(), timezone);
+    public Iso8601Date addNominal(final Iso8601Duration theDuration) {
+        return null;
     }
 
     /**
      * Subtract a nominal duration to this date, returning a new date. See {@link #addNominal} for
      * details and semantics.
      *
-     * @param duration The nominal duration to add.
+     * @param theDuration The nominal duration to add.
      * @return A new date with the nominal duration added.
      */
-    public Iso8601Date subtractNominal(final Iso8601Duration duration) {
-        final LocalDate currentDate = LocalDate.of(year, month == 0 ? 1 : month, day == 0 ? 1 : day);
-        final LocalDate newDate = currentDate
-                .minusYears(duration.years())
-                .minusMonths(duration.months())
-                .minusDays(duration.days() + duration.weeks() * 7L);
-
-        return new Iso8601Date(newDate.toString(), timezone);
+    public Iso8601Date subtractNominal(final Iso8601Duration theDuration) {
+        return null;
     }
 
     @Override
