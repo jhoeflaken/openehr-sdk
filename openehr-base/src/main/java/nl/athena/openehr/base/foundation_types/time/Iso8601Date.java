@@ -2,6 +2,8 @@ package nl.athena.openehr.base.foundation_types.time;
 
 import jakarta.validation.constraints.NotNull;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.time.YearMonth;
 import java.util.regex.Matcher;
 
@@ -161,7 +163,12 @@ public class Iso8601Date extends Iso8601Type {
      * @return A new date with the duration added.
      */
     public Iso8601Date add(final Iso8601Duration theDuration) {
-        return null;
+        final LocalDate currentDate = LocalDate.of(year, month == 0 ? 1 : month, day == 0 ? 1 : day);
+        final Period period = Period.of(theDuration.years(), theDuration.months(), theDuration.days() + theDuration.weeks() * 7);
+        final LocalDate newDate = currentDate.plus(period);
+        final String value = String.format("%04d-%02d-%02d", newDate.getYear(), newDate.getMonthValue(), newDate.getDayOfMonth());
+
+        return new Iso8601Date(value, timezone, newDate.getYear(), newDate.getMonthValue(), newDate.getDayOfMonth());
     }
 
     /**
@@ -171,7 +178,12 @@ public class Iso8601Date extends Iso8601Type {
      * @return A new date with the duration subtracted.
      */
     public Iso8601Date subtract(final Iso8601Duration theDuration) {
-        return null;
+        final LocalDate currentDate = LocalDate.of(year, month == 0 ? 1 : month, day == 0 ? 1 : day);
+        final Period period = Period.of(theDuration.years(), theDuration.months(), theDuration.days() + theDuration.weeks() * 7);
+        final LocalDate newDate = currentDate.minus(period);
+        final String value = String.format("%04d-%02d-%02d", newDate.getYear(), newDate.getMonthValue(), newDate.getDayOfMonth());
+
+        return new Iso8601Date(value, timezone, newDate.getYear(), newDate.getMonthValue(), newDate.getDayOfMonth());
     }
 
     /**
@@ -181,7 +193,17 @@ public class Iso8601Date extends Iso8601Type {
      * @return The difference between this date and the other date.
      */
     public Iso8601Duration diff(final Iso8601Date theOther) {
-        return null;
+        LocalDate thisDate = LocalDate.of(year, month == 0 ? 1 : month, day == 0 ? 1 : day);
+        LocalDate otherDate = LocalDate.of(theOther.year(), theOther.month() == 0 ? 1 : theOther.month(), theOther.day() == 0 ? 1 : theOther.day());
+
+        Period period = Period.between(otherDate, thisDate);
+
+        int years = period.getYears();
+        int months = period.getMonths();
+        int days = period.getDays();
+        final String value = String.format("P%dY%dM%dD", years, months, days);
+        return new Iso8601Duration(value, years, months, 0, days, 0, 0, 0,
+                0.0f, false, false);
     }
 
     /**
@@ -206,7 +228,15 @@ public class Iso8601Date extends Iso8601Type {
      * @return A new date with the nominal duration added.
      */
     public Iso8601Date addNominal(final Iso8601Duration theDuration) {
-        return null;
+        final LocalDate currentDate = LocalDate.of(year, month == 0 ? 1 : month, day == 0 ? 1 : day);
+        final LocalDate newDate = currentDate.plusYears(theDuration.years())
+                .plusMonths(theDuration.months())
+                .plusWeeks(theDuration.weeks())
+                .plusDays(theDuration.days());
+
+        String value = String.format("%04d-%02d-%02d", newDate.getYear(), newDate.getMonthValue(), newDate.getDayOfMonth());
+        return new Iso8601Date(value, timezone, newDate.getYear(), monthUnknown() ? 0 : newDate.getMonthValue(),
+                dayUnknown() ? 0 : newDate.getDayOfMonth());
     }
 
     /**
@@ -217,7 +247,15 @@ public class Iso8601Date extends Iso8601Type {
      * @return A new date with the nominal duration added.
      */
     public Iso8601Date subtractNominal(final Iso8601Duration theDuration) {
-        return null;
+        final LocalDate currentDate = LocalDate.of(year, month == 0 ? 1 : month, day == 0 ? 1 : day);
+        final LocalDate newDate = currentDate.minusYears(theDuration.years())
+                .minusMonths(theDuration.months())
+                .minusWeeks(theDuration.weeks())
+                .minusDays(theDuration.days());
+
+        String value = String.format("%04d-%02d-%02d", newDate.getYear(), newDate.getMonthValue(), newDate.getDayOfMonth());
+        return new Iso8601Date(value, timezone, newDate.getYear(), monthUnknown() ? 0 : newDate.getMonthValue(),
+                dayUnknown() ? 0 : newDate.getDayOfMonth());
     }
 
     @Override
