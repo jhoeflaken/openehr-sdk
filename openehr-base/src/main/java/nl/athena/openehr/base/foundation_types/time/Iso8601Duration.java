@@ -22,8 +22,7 @@ public class Iso8601Duration extends Iso8601Type {
     private final float fractionalSeconds;
     private final boolean isDecimalSignComma;
     private final boolean isNegative;
-
-    private float totalDurationInSeconds;
+    private final float totalDurationInSeconds;
 
     /**
      * Pattern for ISO8601 duration.
@@ -100,6 +99,16 @@ public class Iso8601Duration extends Iso8601Type {
         isDecimalSignComma = theIsDecimalSignComma;
         isNegative = theIsNegative;
 
+        float total = calcSeconds();
+        totalDurationInSeconds = isNegative ? -total : total;
+    }
+
+    /**
+     * Calculate the total duration in seconds.
+     *
+     * @return The total duration in seconds.
+     */
+    private float calcSeconds() {
         long totalSeconds = 0;
 
         // Convert each component to seconds and add to totalSeconds
@@ -112,10 +121,7 @@ public class Iso8601Duration extends Iso8601Type {
         totalSeconds += seconds;
 
         // Add fractional seconds
-        float total = totalSeconds + fractionalSeconds;
-
-        // If the duration is negative, make the total duration negative
-        totalDurationInSeconds = isNegative ? -total : total;
+        return totalSeconds + fractionalSeconds;
     }
 
     /**
@@ -217,24 +223,59 @@ public class Iso8601Duration extends Iso8601Type {
         return getValue();
     }
 
+    /**
+     * Add two durations.
+     *
+     * @param theOther The other duration.
+     * @return The sum of the two durations.
+     */
     public Iso8601Duration add(final Iso8601Duration theOther) {
-        return null;
+        final float seconds = totalDurationInSeconds + theOther.totalDurationInSeconds;
+        return Iso8601Duration.of(valueFromSeconds(seconds));
     }
 
+    /**
+     * Subtract two durations.
+     *
+     * @param theOther The other duration.
+     * @return The difference of the two durations.
+     */
     public Iso8601Duration subtract(final Iso8601Duration theOther) {
-        return null;
+        final float seconds = totalDurationInSeconds - theOther.totalDurationInSeconds;
+        return Iso8601Duration.of(valueFromSeconds(seconds));
     }
 
-    public Iso8601Duration multiply(final Float theFactor) {
-        return null;
+    /**
+     * Multiply the duration by a factor.
+     *
+     * @param theFactor The factor to multiply by.
+     * @return The duration multiplied by the factor.
+     */
+    public Iso8601Duration multiply(final float theFactor) {
+        final float seconds = totalDurationInSeconds * theFactor;
+        return Iso8601Duration.of(valueFromSeconds(seconds));
     }
 
-    public Iso8601Duration divide(final Float theDivisor) {
-        return null;
+    /**
+     * Divide the duration by a divisor.
+     *
+     * @param theDivisor The divisor to divide by.
+     * @return The duration divided by the divisor.
+     */
+    public Iso8601Duration divide(final float theDivisor) {
+        final float seconds = totalDurationInSeconds / theDivisor;
+        return Iso8601Duration.of(valueFromSeconds(seconds));
     }
 
+    /**
+     * Negate the duration.
+     *
+     * @return The negated duration.
+     */
     public Iso8601Duration negative() {
-        return null;
+        return isNegative ?
+                Iso8601Duration.of(getValue().substring(1)) :
+                Iso8601Duration.of("-" + getValue());
     }
 
     @Override
@@ -248,7 +289,76 @@ public class Iso8601Duration extends Iso8601Type {
     }
 
     @Override
-    public int compareTo(Temporal o) {
-        return 0;
+    @SuppressWarnings("NullableProblems")
+    public int compareTo(@NotNull Temporal theOther) {
+        if (!(theOther instanceof Iso8601Duration other)) {
+            throw new IllegalArgumentException("Cannot compare Iso8601Duration with " + theOther.getClass().getSimpleName());
+        }
+
+        return Float.compare(totalDurationInSeconds, other.totalDurationInSeconds);
     }
+
+    /**
+     * Convert a duration in seconds to an ISO8601 duration string.
+     *
+     * @param totalSeconds The total duration in seconds.
+     * @return The ISO8601 duration string.
+     */
+    public static String valueFromSeconds(float totalSeconds) {
+        boolean isNegative = totalSeconds < 0;
+        totalSeconds = Math.abs(totalSeconds);
+
+        int years = (int) (totalSeconds / (365 * 24 * 60 * 60));
+        totalSeconds %= 365 * 24 * 60 * 60;
+
+        int months = (int) (totalSeconds / (30 * 24 * 60 * 60));
+        totalSeconds %= 30 * 24 * 60 * 60;
+
+        int weeks = (int) (totalSeconds / (7 * 24 * 60 * 60));
+        totalSeconds %= 7 * 24 * 60 * 60;
+
+        int days = (int) (totalSeconds / (24 * 60 * 60));
+        totalSeconds %= 24 * 60 * 60;
+
+        int hours = (int) (totalSeconds / (60 * 60));
+        totalSeconds %= 60 * 60;
+
+        int minutes = (int) (totalSeconds / 60);
+        totalSeconds %= 60;
+
+        float seconds = totalSeconds;
+
+        StringBuilder duration = new StringBuilder();
+        if (isNegative) {
+            duration.append("-");
+        }
+        duration.append("P");
+        if (years > 0) {
+            duration.append(years).append("Y");
+        }
+        if (months > 0) {
+            duration.append(months).append("M");
+        }
+        if (weeks > 0) {
+            duration.append(weeks).append("W");
+        }
+        if (days > 0) {
+            duration.append(days).append("D");
+        }
+        if (hours > 0 || minutes > 0 || seconds > 0) {
+            duration.append("T");
+            if (hours > 0) {
+                duration.append(hours).append("H");
+            }
+            if (minutes > 0) {
+                duration.append(minutes).append("M");
+            }
+            if (seconds > 0) {
+                duration.append(seconds).append("S");
+            }
+        }
+
+        return duration.toString();
+    }
+
 }

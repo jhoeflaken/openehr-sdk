@@ -47,4 +47,60 @@ public class Iso8601DurationTests {
         assertThrows(IllegalArgumentException.class, () -> Iso8601Duration.of("P5H6M7S"));
     }
 
+    @Test
+    void shouldAddDurations() {
+        Iso8601Duration duration1 = Iso8601Duration.of("P1Y2M3W4DT5H6M7S");
+        Iso8601Duration duration2 = Iso8601Duration.of("P1Y2M3W4DT5H6M7S");
+        Iso8601Duration result = duration1.add(duration2);
+        assertEquals(duration1.toSeconds() + duration2.toSeconds(), result.toSeconds());
+    }
+
+    @Test
+    void shouldSubtractDurations() {
+        Iso8601Duration duration1 = Iso8601Duration.of("P2Y4M6W8DT10H12M14S");
+        Iso8601Duration duration2 = Iso8601Duration.of("P1Y2M3W4DT5H6M7S");
+        Iso8601Duration result = duration1.subtract(duration2);
+        assertEquals(duration1.toSeconds() - duration2.toSeconds(), result.toSeconds());
+    }
+
+    @Test
+    void shouldMultiplyDuration() {
+        Iso8601Duration duration = Iso8601Duration.of("P1Y2M3W4DT5H6M9S");
+        Iso8601Duration result = duration.multiply(2);
+        assertEquals(duration.toSeconds() * 2, result.toSeconds());
+    }
+
+    @Test
+    void shouldDivideDuration() {
+        Iso8601Duration duration = Iso8601Duration.of("P2Y4M6W8DT10H12M9S");
+        Iso8601Duration result = duration.divide(2);
+        assertEquals(duration.toSeconds() / 2, result.toSeconds());
+    }
+
+    @Test
+    void shouldNegateDuration() {
+        Iso8601Duration duration = Iso8601Duration.of("P1Y2M3W4DT5H6M7S");
+        Iso8601Duration result = duration.negative();
+        assertEquals(result.toSeconds(), result.toSeconds());
+    }
+
+    @Test
+    void shouldCompareDurations() {
+        Iso8601Duration duration1 = Iso8601Duration.of("P1Y2M3W4DT5H6M7S");
+        Iso8601Duration duration2 = Iso8601Duration.of("P1Y2M3W4DT5H6M7S");
+        assertEquals(0, duration1.compareTo(duration2));
+    }
+
+    @Test
+    void shouldConvertToSeconds() {
+        Iso8601Duration duration = Iso8601Duration.of("P1Y2M3W4DT5H6M7.9999S");
+        assertEquals(3.889837E7f, duration.toSeconds());
+    }
+
+    @Test
+    void shouldConvertToString() {
+        Iso8601Duration duration = Iso8601Duration.of("P1Y2M3W4DT5H6M7.9999S");
+        assertEquals("P1Y2M3W4DT5H6M7.9999S", duration.asString());
+    }
+
 }
