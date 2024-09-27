@@ -5,6 +5,15 @@ import jakarta.validation.constraints.NotNull;
 import java.time.YearMonth;
 import java.util.regex.Matcher;
 
+/**
+ * Represents an ISO 8601 date, including partial and extended forms. Value may be:
+ * <ul>
+ *  <li>YYYY-MM-DD (extended, preferred)</li>
+ * * <li>YYYYMMDD (compact)</li>
+ * <li>a partial invariant.</li>
+ * </ul>
+ * See {@link TimeDefinitions#validIso8601Date} for validity.
+ */
 public class Iso8601Date extends Iso8601Type {
 
     private final int year;
@@ -12,13 +21,26 @@ public class Iso8601Date extends Iso8601Type {
     private final int day;
     private final Iso8601Timezone timezone;
 
-    public static Iso8601Date of(@NotNull final String value) {
-        return Iso8601Date.of(value, null);
+    /**
+     * Create a new ISO-8601 date without timezone.
+     *
+     * @param theValue The ISO8601 date value.
+     * @return A new Iso8601Date instance.
+     */
+    public static Iso8601Date of(@NotNull final String theValue) {
+        return Iso8601Date.of(theValue, null);
     }
 
+    /**
+     * Create a new ISO-8601 date with timezone.
+     *
+     * @param theValue    The ISO8601 date value.
+     * @param theTimezone The timezone.
+     * @return A new Iso8601Date instance.
+     */
     public static Iso8601Date of(
             @NotNull final String theValue,
-            final Iso8601Timezone timezone) {
+            final Iso8601Timezone theTimezone) {
 
         final Matcher matcher = ISO_8601_DATE_PATTERN.matcher(theValue);
         if (!matcher.matches()) {
@@ -26,7 +48,7 @@ public class Iso8601Date extends Iso8601Type {
         }
 
         int year = Integer.parseInt(matcher.group(1));
-        int month = matcher.group(3)  != null ? Integer.parseInt(matcher.group(3)) : 0;
+        int month = matcher.group(3) != null ? Integer.parseInt(matcher.group(3)) : 0;
         int day = matcher.group(5) != null ? Integer.parseInt(matcher.group(5)) : 0;
 
         // If year (required), month (optional) and day (optional) is specified we need to
@@ -38,14 +60,17 @@ public class Iso8601Date extends Iso8601Type {
             }
         }
 
-        return new Iso8601Date(theValue, timezone, year, month, day);
-
+        return new Iso8601Date(theValue, theTimezone, year, month, day);
     }
 
     /**
      * Constructor for new ISO-8601 date.
      *
-     * @param theValue The ISO8601 value.
+     * @param theValue    The ISO8601 value.
+     * @param theTimezone The timezone.
+     * @param theYear     The year.
+     * @param theMonth    The month.
+     * @param theDay      The day.
      */
     public Iso8601Date(
             @NotNull final String theValue,
