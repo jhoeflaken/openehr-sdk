@@ -7,11 +7,11 @@ import java.util.regex.Pattern;
 
 /**
  * ISO8601 timezone string, in format:
- *<p/>
+ * <p/>
  * Z | ±hh[mm]
- *<p/>
+ * <p/>
  * where:
- *<ul>
+ * <ul>
  *  <li>
  *      hh is "00" - "23" (0-filled to two digits)
  *  </li>
@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
  *      Z is a literal meaning UTC (modern replacement for GMT), i.e. timezone +0000
  *  </l>
  *  </ul>
- *  <p/>
+ * <p/>
  *  See <a href="https://specifications.openehr.org/releases/BASE/development/foundation_types.html#_iso8601_timezone_class">
  *      Iso8601Timezone</a> class.
  */
@@ -34,53 +34,84 @@ public class Iso8601Timezone extends Iso8601Type {
     private final int hour;
     private final int minute;
     private final int sign;
-    private boolean minuteUnknown = true;
-    private boolean isPartial = false;
-    private boolean isExtended = false;
+    private final boolean minuteUnknown;
+    private final boolean isPartial;
+    private final boolean isExtended;
+
+    /**
+     * Create an instance of Iso8601Timezone from a string.
+     *
+     * @param theValue The ISO8601 timezone value.
+     * @return An instance of Iso8601Timezone.
+     */
+    public static Iso8601Timezone of(@NotNull String theValue) {
+        final Matcher matcher = ISO_8601_TIMEZONE_PATTERN.matcher(theValue);
+        if (!matcher.matches()) {
+            throw new IllegalArgumentException("Invalid ISO8601 timezone value: " + theValue);
+        }
+
+        // Check if Zulu/UTC/GMT timezone is specified.
+        if (matcher.group(1).equals("Z")) {
+            return new Iso8601Timezone(theValue, 0, 0, 1, false,
+                    false, false);
+        }
+
+        int minute = 0;
+        boolean minuteUnknown = false;
+        boolean isPartial = false;
+        boolean isExtended = false;
+
+        // Specified offset
+        int sign = matcher.group(2).equals("+") ? 1 : -1;
+        int hour = Integer.parseInt(matcher.group(3));
+
+        // Check if minutes are specified.
+        if (matcher.group(4) == null) {
+            isPartial = true;
+            minuteUnknown = true;
+        } else {
+            if (matcher.group(4).startsWith(":")) {
+                isExtended = true;
+                minute = Integer.parseInt(matcher.group(4).substring(1));
+            } else {
+                minute = Integer.parseInt(matcher.group(4));
+            }
+        }
+
+        return new Iso8601Timezone(theValue, hour, minute, sign, minuteUnknown, isPartial, isExtended);
+    }
 
     /**
      * Constructor for Iso8601Type.
      *
-     * @param theValue The ISO8601 value.
+     * @param theValue  The ISO8601 value.
+     * @param theHour   The hour part of timezone.
+     * @param theMinute The minute part of timezone.
+     * @param theSign   The sign of the timezone. 1 for +, -1 for -.
+     * @param theMinuteUnknown True if the minute part of the timezone is unknown.
+     * @param theIsPartial True if this timezone is partial.
+     * @param theIsExtended True if this timezone is in the 'extended' form.
      */
-    public Iso8601Timezone(@NotNull String theValue) {
+    Iso8601Timezone(
+            final String theValue,
+            final int theHour,
+            final int theMinute,
+            final int theSign,
+            final boolean theMinuteUnknown,
+            final boolean theIsPartial,
+            final boolean theIsExtended) {
         super(theValue);
-
-        final Matcher matcher = ISO_8601_TIMEZONE_PATTERN.matcher(theValue);
-        if (matcher.matches()) {
-            if (matcher.group(1).equals("Z")) {
-                // UTC time which has offset +00:00
-                hour = 0;
-                minute = 0;
-                sign = 1;
-                minuteUnknown = false;
-            } else {
-                // Specified offset
-                sign = matcher.group(2).equals("+") ? 1 : -1;
-                hour = Integer.parseInt(matcher.group(3));
-
-                // Check if minutes are specified.
-                if (matcher.group(4) == null) {
-                    minute = 0;
-                    isPartial = true;
-                } else {
-                    minuteUnknown = false;
-                    if (matcher.group(4).startsWith(":")) {
-                        isExtended = true;
-                        minute = Integer.parseInt(matcher.group(4).substring(1));
-                    } else {
-                        minute = Integer.parseInt(matcher.group(4));
-                    }
-                }
-            }
-        }  else {
-            // Does not match the pattern, so not a valid timezone.
-            throw new IllegalArgumentException("Invalid ISO8601 timezone value: " + theValue);
-        }
+        hour = theHour;
+        minute = theMinute;
+        sign = theSign;
+        minuteUnknown = theMinuteUnknown;
+        isPartial = theIsPartial;
+        isExtended = theIsExtended;
     }
 
     /**
      * Extract the hour part of timezone, as an Integer in the range 00 - 24.
+     *
      * @return The hour part of timezone.
      */
     public int hour() {

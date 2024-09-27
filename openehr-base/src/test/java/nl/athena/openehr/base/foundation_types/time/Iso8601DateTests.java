@@ -9,7 +9,7 @@ public class Iso8601DateTests {
     @Test
     void shouldAddDuration() {
         Iso8601Date date = new Iso8601Date("2021-12-31");
-        Iso8601Duration duration = new Iso8601Duration("P1Y2M3W4D");
+        Iso8601Duration duration = Iso8601Duration.of("P1Y2M3W4D");
         Iso8601Date newDate = date.add(duration);
         assertEquals("2023-03-28", newDate.asString());
     }
@@ -17,7 +17,7 @@ public class Iso8601DateTests {
     @Test
     void shouldSubtractDuration() {
         Iso8601Date date = new Iso8601Date("20211231");
-        Iso8601Duration duration = new Iso8601Duration("P1Y2M3W4D");
+        Iso8601Duration duration = Iso8601Duration.of("P1Y2M3W4D");
         Iso8601Date newDate = date.subtract(duration);
         assertEquals("2020-10-03", newDate.asString());
     }
@@ -33,7 +33,7 @@ public class Iso8601DateTests {
     @Test
     void shouldAddNominalDuration() {
         Iso8601Date date = new Iso8601Date("20210131");
-        Iso8601Duration duration = new Iso8601Duration("P1M");
+        Iso8601Duration duration = Iso8601Duration.of("P1M");
         Iso8601Date newDate = date.addNominal(duration);
         assertEquals("2021-02-28", newDate.asString());
     }
@@ -41,7 +41,7 @@ public class Iso8601DateTests {
     @Test
     void shouldSubtractNominalDuration() {
         Iso8601Date date = new Iso8601Date("2021-03-31");
-        Iso8601Duration duration = new Iso8601Duration("P1M");
+        Iso8601Duration duration = Iso8601Duration.of("P1M");
         Iso8601Date newDate = date.subtractNominal(duration);
         assertEquals("2021-02-28", newDate.asString());
     }
@@ -67,7 +67,7 @@ public class Iso8601DateTests {
     @Test
     void shouldAddNominalDurationToYYYYMM() {
         Iso8601Date date = new Iso8601Date("2021-12");
-        Iso8601Duration duration = new Iso8601Duration("P1Y12D");
+        Iso8601Duration duration = Iso8601Duration.of("P1Y12D");
         Iso8601Date newDate = date.addNominal(duration);
         assertEquals("2022-12", newDate.asString());
     }
@@ -75,7 +75,7 @@ public class Iso8601DateTests {
     @Test
     void shouldSubtractNominalDurationFromYYYYMM() {
         Iso8601Date date = new Iso8601Date("2021-12");
-        Iso8601Duration duration = new Iso8601Duration("P1Y12D");
+        Iso8601Duration duration = Iso8601Duration.of("P1Y12D");
         Iso8601Date newDate = date.subtractNominal(duration);
         assertEquals("2020-12", newDate.asString());
     }
@@ -91,7 +91,7 @@ public class Iso8601DateTests {
     @Test
     void shouldAddNominalDurationToYYYY() {
         Iso8601Date date = new Iso8601Date("2021");
-        Iso8601Duration duration = new Iso8601Duration("P1Y12D");
+        Iso8601Duration duration = Iso8601Duration.of("P1Y12D");
         Iso8601Date newDate = date.addNominal(duration);
         assertEquals("2022", newDate.asString());
     }
@@ -99,7 +99,7 @@ public class Iso8601DateTests {
     @Test
     void shouldSubtractNominalDurationFromYYYY() {
         Iso8601Date date = new Iso8601Date("2021");
-        Iso8601Duration duration = new Iso8601Duration("P1Y12D");
+        Iso8601Duration duration = Iso8601Duration.of("P1Y12D");
         Iso8601Date newDate = date.subtractNominal(duration);
         assertEquals("2020", newDate.asString());
     }

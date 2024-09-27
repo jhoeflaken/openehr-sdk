@@ -29,6 +29,9 @@ public class Iso8601DurationValidationTests {
         assertTrue(timeDefinitions.validIso8601Duration("P1Y2M3W4DT5H6M7.123S"));
         assertTrue(timeDefinitions.validIso8601Duration("P1Y2M3W4DT5H6M7,123S"));
         assertTrue(timeDefinitions.validIso8601Duration("PT5H6M7S"));
+        assertTrue(timeDefinitions.validIso8601Duration("-P1Y2M3W4DT5H6M7S"));
+        assertTrue(timeDefinitions.validIso8601Duration("-P1Y2M3W4D"));
+        assertTrue(timeDefinitions.validIso8601Duration("-P1Y"));
 
         // Invalid durations
         assertFalse(timeDefinitions.validIso8601Duration("P"));

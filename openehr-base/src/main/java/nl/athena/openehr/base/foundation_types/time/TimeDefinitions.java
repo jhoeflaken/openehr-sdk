@@ -27,7 +27,7 @@ public interface TimeDefinitions {
     Pattern ISO_8601_DATE_TIME_PATTERN = Pattern.compile(ISO_8601_DATE_TIME_REGEX);
 
     // ISO8601 duration pattern.
-    String ISO_8601_DURATION_REGEX = "^P(?=.*[YMWDT])(?:([0-9]+)Y)?(?:([0-9]+)M)?(?:([0-9]+)W)?(?:([0-9]+)D)?" +
+    String ISO_8601_DURATION_REGEX = "^-?P(?=.*[YMWDT])(?:([0-9]+)Y)?(?:([0-9]+)M)?(?:([0-9]+)W)?(?:([0-9]+)D)?" +
             "(?:T(?=.*[HMS])(?:([0-9]+)H)?(?:([0-9]+)M)?(?:([0-9]+)([.,][0-9]{1,6})?S)?)?$";
     Pattern ISO_8601_DURATION_PATTERN = Pattern.compile(ISO_8601_DURATION_REGEX);
 

@@ -172,7 +172,7 @@ public class Iso8601Date extends Iso8601Type {
             duration.append(period.getDays()).append("D");
         }
 
-        return new Iso8601Duration(duration.toString());
+        return null;
     }
 
     /**
