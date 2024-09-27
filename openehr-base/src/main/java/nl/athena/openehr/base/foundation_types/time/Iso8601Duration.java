@@ -23,8 +23,7 @@ public class Iso8601Duration extends Iso8601Type {
     private final boolean isDecimalSignComma;
     private final boolean isNegative;
 
-    private long totalSeconds;
-    private int totalNanoseconds;
+    private float totalDurationInSeconds;
 
     /**
      * Pattern for ISO8601 duration.
@@ -100,48 +99,120 @@ public class Iso8601Duration extends Iso8601Type {
         fractionalSeconds = theFractionalSeconds;
         isDecimalSignComma = theIsDecimalSignComma;
         isNegative = theIsNegative;
+
+        long totalSeconds = 0;
+
+        // Convert each component to seconds and add to totalSeconds
+        totalSeconds += years * 365L * 24L * 60L * 60L; // Approximate conversion for years
+        totalSeconds += months * 30L * 24L * 60L * 60L; // Approximate conversion for months
+        totalSeconds += weeks * 7L * 24L * 60L * 60L;
+        totalSeconds += days * 24L * 60L * 60L;
+        totalSeconds += hours * 60L * 60L;
+        totalSeconds += minutes * 60L;
+        totalSeconds += seconds;
+
+        // Add fractional seconds
+        float total = totalSeconds + fractionalSeconds;
+
+        // If the duration is negative, make the total duration negative
+        totalDurationInSeconds = isNegative ? -total : total;
     }
 
+    /**
+     * Number of years in the value, i.e. the number preceding the 'Y' in the 'YMD' part, if one exists otherwise 0.
+     *
+     * @return The number of years.
+     */
     public Integer years() {
         return isNegative ? -years : years;
     }
 
+    /**
+     * Number of months in the value, i.e. the number preceding the 'M' in the 'YMD' part, if one exists otherwise 0.
+     *
+     * @return The number of months.
+     */
     public Integer months() {
         return isNegative ? -months : months;
     }
 
-    public Integer days() {
-        return isNegative ? -days : days;
-    }
-
-    public Integer hours() {
-        return isNegative ? -hours : hours;
-    }
-
-    public Integer minutes() {
-        return isNegative ? -minutes : minutes;
-    }
-
-    public Integer seconds() {
-        return isNegative ? -seconds : seconds;
-    }
-
-    public Float fractionalSeconds() {
-        return isNegative ? -fractionalSeconds : fractionalSeconds;
-    }
-
+    /**
+     * Number of weeks in the value, i.e. the number preceding the 'W' in the 'W' part, if one exists otherwise 0.
+     *
+     * @return The number of weeks.
+     */
     public Integer weeks() {
         return isNegative ? -weeks : weeks;
     }
 
+    /**
+     * Number of days in the value, i.e. the number preceding the 'D' in the 'YMD' part, if one exists otherwise 0.
+     *
+     * @return The number of days.
+     */
+    public Integer days() {
+        return isNegative ? -days : days;
+    }
+
+    /**
+     * Number of hours in the value, i.e. the number preceding the 'H' in the 'HMS' part, if one exists otherwise 0.
+     *
+     * @return The number of hours.
+     */
+    public Integer hours() {
+        return isNegative ? -hours : hours;
+    }
+
+    /**
+     * Number of minutes in the value, i.e. the number preceding the 'M' in the 'HMS' part, if one exists otherwise 0.
+     *
+     * @return The number of minutes.
+     */
+    public Integer minutes() {
+        return isNegative ? -minutes : minutes;
+    }
+
+    /**
+     * Number of seconds in the value, i.e. the number preceding the 'S' in the 'HMS' part, if one exists otherwise 0.
+     *
+     * @return The number of seconds.
+     */
+    public Integer seconds() {
+        return isNegative ? -seconds : seconds;
+    }
+
+    /**
+     * Fractional seconds in the value, i.e. the number following the 'S' in the 'HMS' part, if one exists otherwise 0.
+     *
+     * @return The number of fractional seconds.
+     */
+    public Float fractionalSeconds() {
+        return isNegative ? -fractionalSeconds : fractionalSeconds;
+    }
+
+    /**
+     * Returns true if the decimal sign is a comma.
+     *
+     * @return True if the decimal sign is a comma.
+     */
     public boolean isDecimalSignComma() {
         return isDecimalSignComma;
     }
 
+    /**
+     * The duration in seconds.
+     *
+     * @return The duration in seconds.
+     */
     public Float toSeconds() {
-        return 0.0f;
+        return totalDurationInSeconds;
     }
 
+    /**
+     * Get the duration in extended format.
+     *
+     * @return The duration in extended format.
+     */
     public String asString() {
         return getValue();
     }
