@@ -3,6 +3,8 @@ package nl.athena.openehr.base.foundation_types.time;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 
+import java.time.Duration;
+import java.time.LocalTime;
 import java.util.regex.Matcher;
 
 /**
@@ -215,7 +217,94 @@ public class Iso8601Time extends Iso8601Type {
     @Override
     @SuppressWarnings("NullableProblems")
     public int compareTo(@NotNull Temporal theOther) {
-        return 0;
+        if (!(theOther instanceof Iso8601Time other)) {
+            throw new IllegalArgumentException("Can only compare with another Iso8601Time instance");
+        }
+
+        LocalTime thisTime = LocalTime.of(hours, minutes, seconds, (int) (fractionalSeconds * 1_000_000_000));
+        LocalTime thatTime = LocalTime.of(other.hours(), other.minutes(), other.seconds(), (int) (other.fractionalSeconds() * 1_000_000_000));
+
+        if (timezone != null) {
+            thisTime = thisTime
+                    .minusHours(timezone.hour())
+                    .minusMinutes(timezone.minute());
+        }
+
+        if (other.timezone() != null) {
+            thatTime = thatTime
+                    .minusHours(other.timezone().hour())
+                    .minusMinutes(other.timezone().minute());
+        }
+
+        return thisTime.compareTo(thatTime);
+    }
+
+    public Iso8601Time add(Iso8601Duration theDuration) {
+        LocalTime currentTime = LocalTime.of(hours, minutes, seconds, (int) (fractionalSeconds * 1_000_000_000));
+        LocalTime newTime = currentTime.plusHours(theDuration.hours())
+                .plusMinutes(theDuration.minutes())
+                .plusSeconds(theDuration.seconds())
+                .plusNanos((long) (theDuration.fractionalSeconds() * 1_000_000_000));
+
+        String value = newTime.toString();
+        if (hasFractionalSeconds) {
+            value += isDecimalSignComma ? "," : ".";
+            value += String.format("%03d", (int) (fractionalSeconds * 1000));
+        }
+
+        return new Iso8601Time(value, newTime.getHour(), newTime.getMinute(), newTime.getSecond(),
+                newTime.getNano() / 1_000_000_000.0f, isDecimalSignComma, hasFractionalSeconds,
+                minuteUnknown, secondUnknown, isPartial, isExtended, timezone);
+    }
+
+    public Iso8601Time subtract(Iso8601Duration theDuration) {
+        LocalTime currentTime = LocalTime.of(hours, minutes, seconds, (int) (fractionalSeconds * 1_000_000_000));
+        LocalTime newTime = currentTime.minusHours(theDuration.hours())
+                .minusMinutes(theDuration.minutes())
+                .minusSeconds(theDuration.seconds())
+                .minusNanos((long) (theDuration.fractionalSeconds() * 1_000_000_000));
+
+        String value = newTime.toString();
+        if (hasFractionalSeconds) {
+            value += isDecimalSignComma ? "," : ".";
+            value += String.format("%03d", (int) (fractionalSeconds * 1000));
+        }
+
+        return new Iso8601Time(value, newTime.getHour(), newTime.getMinute(), newTime.getSecond(),
+                newTime.getNano() / 1_000_000_000.0f, isDecimalSignComma, hasFractionalSeconds,
+                minuteUnknown, secondUnknown, isPartial, isExtended, timezone);
+    }
+
+    public Iso8601Duration diff(Iso8601Time theOther) {
+        LocalTime thisTime = LocalTime.of(hours, minutes, seconds, (int) (fractionalSeconds * 1_000_000_000));
+        LocalTime otherTime = LocalTime.of(theOther.hours(), theOther.minutes(), theOther.seconds(), (int) (theOther.fractionalSeconds() * 1_000_000_000));
+
+        if (timezone != null) {
+            thisTime = thisTime
+                    .minusHours(timezone.hour())
+                    .minusMinutes(timezone.minute());
+        }
+
+        if (theOther.timezone() != null) {
+            otherTime = otherTime
+                    .minusHours(theOther.timezone().hour())
+                    .minusMinutes(theOther.timezone().minute());
+        }
+
+        Duration duration = Duration.between(otherTime, thisTime);
+
+        long hours = duration.toHours();
+        long minutes = duration.toMinutes() % 60;
+        long seconds = duration.getSeconds() % 60;
+        float fractionalSeconds = duration.getNano() / 1_000_000_000.0f;
+
+        String value = String.format("PT%dH%dM%dS", hours, minutes, seconds);
+        if (fractionalSeconds > 0) {
+            value += String.format(".%03d", (int) (fractionalSeconds * 1000));
+        }
+
+        return new Iso8601Duration(value, 0, 0, 0, 0, (int) hours, (int) minutes,
+                (int) seconds, fractionalSeconds,  isDecimalSignComma, duration.isNegative());
     }
 
 }
