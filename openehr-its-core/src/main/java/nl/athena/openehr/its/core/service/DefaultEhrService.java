@@ -2,28 +2,86 @@ package nl.athena.openehr.its.core.service;
 
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import nl.athena.openehr.base.base_types.builtins.Locale;
 import nl.athena.openehr.base.base_types.identification.ObjectVersionId;
 import nl.athena.openehr.base.base_types.identification.Uuid;
+import nl.athena.openehr.its.core.config.Messages;
 import nl.athena.openehr.its.core.dto.EhrStatusDto;
+import nl.athena.openehr.its.core.exception.StateConflictException;
 import nl.athena.openehr.rm.common.change_control.OriginalVersion;
 import nl.athena.openehr.rm.common.change_control.VersionedObject;
+import nl.athena.openehr.rm.common.generic.PartySelf;
 import nl.athena.openehr.rm.common.generic.RevisionHistory;
 import nl.athena.openehr.rm.data_types.quantity.date_time.DvDateTime;
+import nl.athena.openehr.rm.data_types.text.DvText;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class DefaultEhrService implements EhrService {
 
-    @Override
-    public EhrResult create(@Nullable Uuid theEhrId, @Nullable EhrStatusDto theStatus) {
-        return null;
+    private final MessageSource messageSource;
+    private final Locale locale;
+
+    @Autowired
+    public DefaultEhrService(
+            @Nonnull MessageSource theMessageSource,
+            @Nonnull Locale theLocale) {
+        messageSource = theMessageSource;
+        locale = theLocale;
     }
 
     @Override
-    public EhrResult updateStatus(@Nonnull Uuid theEhrId, @Nonnull EhrStatusDto theStatus, @Nonnull ObjectVersionId theTargetObjectId, @Nonnull Uuid theContributionId, @Nonnull Uuid theAuditId) {
+    public EhrResult create(
+            @Nullable Uuid theEhrId,
+            @Nullable EhrStatusDto theStatus) {
+
+        // Check if the EHR ID is null and if so, generate one.
+        if (theEhrId == null) {
+            theEhrId = new Uuid(UUID.randomUUID().toString());
+        }
+
+        // Check that if the EHR ID already exists, because it should be unique when creating a new EHR.
+        if (hasEhr(theEhrId)) {
+            throw new StateConflictException(messageSource.getMessage(Messages.EHR_WITH_ID_ALREADY_EXISTS,
+                    new Object[] { theEhrId }, locale.asJavaLocale()));
+        }
+
+        if (theStatus == null) {
+            theStatus = new EhrStatusDto(
+                    null,
+                    " openEHR-EHR-EHR_STATUS.generic.v1",
+                    new DvText("EHR Status"),
+                    null,
+                    null,
+                    new PartySelf(),
+                    true,
+                    true,
+                    null);
+        } else {
+
+        }
+
+        ObjectVersionId statusVersionId = null;
+        theStatus = null;
+
+        // Save the EHR to the database.
+
+        return new EhrResult(theEhrId, statusVersionId, theStatus);
+    }
+
+    @Override
+    public EhrResult updateStatus(
+            @Nonnull Uuid theEhrId,
+            @Nonnull EhrStatusDto theStatus,
+            @Nonnull ObjectVersionId theTargetObjectId,
+            @Nonnull Uuid theContributionId,
+            @Nonnull Uuid theAuditId) {
         return null;
     }
 

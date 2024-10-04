@@ -11,4 +11,6 @@ public interface Locale {
 
     TerminologyCode primaryLanguage();
 
+    java.util.Locale asJavaLocale();
+
 }

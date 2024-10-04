@@ -14,4 +14,8 @@ public class DvText implements DataValue {
     private CodePhrase encoding;
     private List<TermMapping> mappings;
 
+    public DvText(String theValue) {
+        value = theValue;
+    }
+
 }
