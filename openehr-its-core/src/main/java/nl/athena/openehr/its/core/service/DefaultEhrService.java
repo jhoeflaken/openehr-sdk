@@ -41,17 +41,18 @@ public class DefaultEhrService implements EhrService {
             @Nullable Uuid theEhrId,
             @Nullable EhrStatusDto theStatus) {
 
-        // Check if the EHR ID is null and if so, generate one.
+        // Generate a new EHR ID if it is not provided.
         if (theEhrId == null) {
             theEhrId = new Uuid(UUID.randomUUID().toString());
         }
 
-        // Check that if the EHR ID already exists, because it should be unique when creating a new EHR.
+        // Check if the EHR ID already exists, because it should be unique when creating a new EHR.
         if (hasEhr(theEhrId)) {
             throw new StateConflictException(messageSource.getMessage(Messages.EHR_WITH_ID_ALREADY_EXISTS,
                     new Object[] { theEhrId }, locale.asJavaLocale()));
         }
 
+        // Create a new EHR status if it is not provided.
         if (theStatus == null) {
             theStatus = new EhrStatusDto(
                     null,
@@ -64,7 +65,7 @@ public class DefaultEhrService implements EhrService {
                     true,
                     null);
         } else {
-
+            // Validate the EHR status.
         }
 
         ObjectVersionId statusVersionId = null;
