@@ -11,23 +11,31 @@
         <relativePath>../openehr-sdk-parent</relativePath>
     </parent>
 
-    <artifactId>openehr-its-rest</artifactId>
+    <artifactId>openehr-its-core</artifactId>
 
     <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
         </dependency>
-
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-xml</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
         </dependency>
 
         <dependency>
@@ -35,10 +43,6 @@
             <artifactId>openehr-rm</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>nl.athena.openehr</groupId>
-            <artifactId>openehr-its-core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
     </dependencies>
+
 </project>

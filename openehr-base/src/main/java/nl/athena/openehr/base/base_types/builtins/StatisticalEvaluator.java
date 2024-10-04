@@ -3,9 +3,6 @@ package nl.athena.openehr.base.base_types.builtins;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.Collection;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * Statistical functions.

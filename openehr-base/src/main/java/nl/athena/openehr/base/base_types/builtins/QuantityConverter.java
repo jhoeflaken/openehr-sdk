@@ -17,9 +17,10 @@ public interface QuantityConverter {
      * @param theProperty  The property to convert.
      * @return The converted value.
      */
-    Float convertValue(@NotNull final Float theValue,
-                       @NotNull final String theFromUnits,
-                       @NotNull final String theToUnits,
-                       @NotNull final TerminologyCode theProperty);
+    Float convertValue(
+            @NotNull final Float theValue,
+            @NotNull final String theFromUnits,
+            @NotNull final String theToUnits,
+            @NotNull final TerminologyCode theProperty);
 
 }

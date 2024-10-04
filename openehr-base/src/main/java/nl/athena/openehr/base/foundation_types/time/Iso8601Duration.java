@@ -2,6 +2,8 @@ package nl.athena.openehr.base.foundation_types.time;
 
 import jakarta.validation.constraints.NotNull;
 
+import java.time.Duration;
+import java.time.temporal.TemporalAmount;
 import java.util.regex.Matcher;
 
 /**
@@ -361,4 +363,7 @@ public class Iso8601Duration extends Iso8601Type {
         return duration.toString();
     }
 
+    public TemporalAmount toDuration() {
+        return Duration.ofSeconds((long) totalDurationInSeconds);
+    }
 }

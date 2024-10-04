@@ -215,4 +215,7 @@ public class Iso8601Timezone extends Iso8601Type {
 
     }
 
+    public long offsetInSeconds() {
+        return sign * (hour * 3600 + minute * 60);
+    }
 }

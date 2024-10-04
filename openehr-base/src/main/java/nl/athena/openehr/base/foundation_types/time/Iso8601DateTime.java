@@ -1,6 +1,6 @@
 package nl.athena.openehr.base.foundation_types.time;
 
-import java.time.YearMonth;
+import java.time.*;
 import java.util.regex.Matcher;
 
 /**
@@ -28,14 +28,14 @@ import java.util.regex.Matcher;
  */
 public class Iso8601DateTime extends Iso8601Type {
 
-    private int year;
-    private int month;
-    private int day;
-    private int hour;
-    private int minute;
-    private int second;
-    private float fractionalSecond;
-    private Iso8601Timezone timezone;
+    private final int year;
+    private final int month;
+    private final int day;
+    private final int hour;
+    private final int minute;
+    private final int second;
+    private final float fractionalSecond;
+    private final Iso8601Timezone timezone;
 
     public static Iso8601DateTime of(String theValue) {
         final Matcher matcher = ISO_8601_DATE_TIME_PATTERN.matcher(theValue);
@@ -161,32 +161,130 @@ public class Iso8601DateTime extends Iso8601Type {
     }
 
     @Override
-    public int compareTo(Temporal o) {
-        return 0;
+    public int compareTo(Temporal theOther) {
+        if (!(theOther instanceof Iso8601DateTime other)) {
+            throw new IllegalArgumentException("Can only compare with another Iso8601DateTime instance");
+        }
+
+        LocalDateTime thisDateTime = LocalDateTime.of(year, month, day, hour, minute, second, (int) (fractionalSecond * 1_000_000_000));
+        LocalDateTime otherDateTime = LocalDateTime.of(other.year(), other.month(), other.day(), other.hour(), other.minute(), other.second(), (int) (other.fractionalSecond() * 1_000_000_000));
+
+        if (timezone != null) {
+            thisDateTime = thisDateTime.minusSeconds(timezone.offsetInSeconds());
+        }
+        if (other.timezone() != null) {
+            otherDateTime = otherDateTime.minusSeconds(other.timezone().offsetInSeconds());
+        }
+
+        return thisDateTime.compareTo(otherDateTime);
     }
 
     public Iso8601DateTime add(final Iso8601Duration theDuration) {
-        return null;
+        LocalDateTime currentDateTime = LocalDateTime.of(year, month, day, hour, minute, second, (int) (fractionalSecond * 1_000_000_000));
+
+        if (timezone != null) {
+            currentDateTime = currentDateTime.plusSeconds(timezone.offsetInSeconds());
+        }
+
+        LocalDateTime newDateTime = currentDateTime.plus(theDuration.toDuration());
+
+        if (timezone != null) {
+            newDateTime = newDateTime.plusSeconds(timezone.offsetInSeconds());
+        }
+
+        String value = newDateTime.toString();
+        if (hasFractionalSeconds()) {
+            value += isDecimalSignComma() ? "," : ".";
+            value += String.format("%03d", (int) (fractionalSecond * 1000));
+        }
+
+        return new Iso8601DateTime(value, newDateTime.getYear(), newDateTime.getMonthValue(), newDateTime.getDayOfMonth(),
+                newDateTime.getHour(), newDateTime.getMinute(), newDateTime.getSecond(),
+                newDateTime.getNano() / 1_000_000_000.0f, timezone);
     }
 
-    public Iso8601Duration subtract(final Iso8601DateTime theDateTime) {
-        return null;
+    public Iso8601DateTime subtract(final Iso8601Duration theDuration) {
+        LocalDateTime currentDateTime = LocalDateTime.of(year, month, day, hour, minute, second, (int) (fractionalSecond * 1_000_000_000));
+
+        if (timezone != null) {
+            currentDateTime = currentDateTime.plusSeconds(timezone.offsetInSeconds());
+        }
+
+        LocalDateTime newDateTime = currentDateTime.minus(theDuration.toDuration());
+
+        if (timezone != null) {
+            newDateTime = newDateTime.plusSeconds(timezone.offsetInSeconds());
+        }
+
+        String value = newDateTime.toString();
+        if (hasFractionalSeconds()) {
+            value += isDecimalSignComma() ? "," : ".";
+            value += String.format("%03d", (int) (fractionalSecond * 1000));
+        }
+
+        return new Iso8601DateTime(value, newDateTime.getYear(), newDateTime.getMonthValue(), newDateTime.getDayOfMonth(),
+                newDateTime.getHour(), newDateTime.getMinute(), newDateTime.getSecond(),
+                newDateTime.getNano() / 1_000_000_000.0f, timezone);
+
     }
 
     public Iso8601Duration diff(final Iso8601DateTime theDateTime) {
-        return null;
+        LocalDateTime thisDateTime = LocalDateTime.of(year, month, day, hour, minute, second, (int) (fractionalSecond * 1_000_000_000));
+        LocalDateTime otherDateTime = LocalDateTime.of(theDateTime.year(), theDateTime.month(), theDateTime.day(), theDateTime.hour(), theDateTime.minute(), theDateTime.second(), (int) (theDateTime.fractionalSecond() * 1_000_000_000));
+
+        if (timezone != null) {
+            thisDateTime = thisDateTime.minusSeconds(timezone.offsetInSeconds());
+        }
+        if (theDateTime.timezone() != null) {
+            otherDateTime = otherDateTime.minusSeconds(theDateTime.timezone().offsetInSeconds());
+        }
+
+        Duration duration = Duration.between(otherDateTime, thisDateTime);
+
+        long hours = duration.toHours();
+        long minutes = duration.toMinutes() % 60;
+        long seconds = duration.getSeconds() % 60;
+        float fractionalSeconds = duration.getNano() / 1_000_000_000.0f;
+
+        String value = String.format("PT%dH%dM%dS", hours, minutes, seconds);
+        if (fractionalSeconds > 0) {
+            value += String.format(".%03d", (int) (fractionalSeconds * 1000));
+        }
+
+        return new Iso8601Duration(value, 0, 0, 0, 0, (int) hours, (int) minutes, (int) seconds, fractionalSeconds, false, duration.isNegative());
     }
 
     public Iso8601DateTime addNominal(final Iso8601Duration theDuration) {
-        return null;
+        return add(theDuration);
     }
 
-    public Iso8601Duration subtractNominal(final Iso8601DateTime theDateTime) {
-        return null;
+    public Iso8601DateTime subtractNominal(final Iso8601Duration theDuration) {
+        return subtract(theDuration);
     }
 
     public String asString() {
-        return null;
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(String.format("%04d", year));
+        if (month != 0) {
+            sb.append(String.format("-%02d", month));
+            if (day != 0) {
+                sb.append(String.format("-%02d", day));
+            }
+        }
+
+        sb.append("T");
+        sb.append(String.format("%02d:%02d:%02d", hour, minute, second));
+        if (fractionalSecond > 0) {
+            sb.append(isDecimalSignComma() ? "," : ".");
+            sb.append(String.format("%03d", (int) (fractionalSecond * 1000)));
+        }
+
+        if (timezone != null) {
+            sb.append(timezone.toString());
+        }
+
+        return sb.toString();
     }
 
 }
