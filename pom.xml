@@ -34,5 +34,6 @@
         <module>openehr-sdt</module>
         <module>openehr-bmm</module>
         <module>openehr-its-core</module>
+        <module>openehr-util</module>
     </modules>
 </project>

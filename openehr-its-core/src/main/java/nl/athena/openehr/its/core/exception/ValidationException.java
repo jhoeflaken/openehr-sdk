@@ -1,16 +1,16 @@
 package nl.athena.openehr.its.core.exception;
 
 /**
- * Exception thrown when a state conflict occurs.
+ * Exception thrown when a validation error occurs.
  */
-public class StateConflictException extends RuntimeException {
+public class ValidationException extends RuntimeException {
 
     /**
      * Creates a new instance of this exception with the given message.
      *
      * @param theMessage The message of the exception.
      */
-    public StateConflictException(final String theMessage) {
+    public ValidationException(final String theMessage) {
         super(theMessage);
     }
 
@@ -20,7 +20,7 @@ public class StateConflictException extends RuntimeException {
      * @param theMessage The message of the exception.
      * @param theCause   The cause of the exception.
      */
-    public StateConflictException(
+    public ValidationException(
             final String theMessage,
             final Throwable theCause) {
         super(theMessage, theCause);

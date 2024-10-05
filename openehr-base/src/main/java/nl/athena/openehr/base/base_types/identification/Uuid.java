@@ -1,5 +1,8 @@
 package nl.athena.openehr.base.base_types.identification;
 
+import nl.athena.openehr.base.Messages;
+import nl.athena.openehr.util.i18n.I18n;
+
 import java.util.regex.Pattern;
 
 public class Uuid extends Uid {
@@ -26,7 +29,7 @@ public class Uuid extends Uid {
         super(theValue);
         boolean valid = UUID_PATTERN.matcher(theValue).matches();
         if (!valid) {
-            throw new IllegalArgumentException("Invalid UUID value: " + theValue);
+            throw new IllegalArgumentException(I18n.getMessage(Messages.INVALID_UUID_VALUE, theValue));
         }
     }
 

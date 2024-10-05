@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="openehr-am" />
         <module name="openehr-its-rest" />
+        <module name="openehr-util" />
         <module name="openehr-query" />
         <module name="openehr-sdt" />
         <module name="openehr-bmm" />

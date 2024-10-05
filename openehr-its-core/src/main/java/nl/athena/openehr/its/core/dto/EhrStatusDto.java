@@ -7,6 +7,8 @@ import jakarta.annotation.Nullable;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
+import lombok.Builder;
+import lombok.extern.jackson.Jacksonized;
 import nl.athena.openehr.base.base_types.identification.UidBasedId;
 import nl.athena.openehr.rm.common.archetyped.Archetyped;
 import nl.athena.openehr.rm.common.archetyped.FeederAudit;
@@ -17,6 +19,8 @@ import nl.athena.openehr.rm.data_types.text.DvText;
 @JsonRootName("EHR_STATUS")
 @JacksonXmlRootElement(localName = "ehr_status")
 @XmlType(name = "EHR_STATUS")
+@Jacksonized
+@Builder(setterPrefix = "with", toBuilder = true)
 public record EhrStatusDto(
         @JsonProperty("uid")
         @XmlElement(name = "uid")

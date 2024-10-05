@@ -11,28 +11,15 @@
         <relativePath>../openehr-sdk-parent</relativePath>
     </parent>
 
-    <artifactId>openehr-rm</artifactId>
+    <artifactId>openehr-util</artifactId>
 
     <properties>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>nl.athena.openehr</groupId>
-            <artifactId>openehr-base</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.xml.bind</groupId>
-            <artifactId>jakarta.xml.bind-api</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
         </dependency>
     </dependencies>
 </project>
