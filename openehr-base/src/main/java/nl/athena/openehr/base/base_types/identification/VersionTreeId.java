@@ -1,7 +1,11 @@
 package nl.athena.openehr.base.base_types.identification;
 
+import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 import org.apache.commons.lang3.StringUtils;
 
+@Getter
+@SuperBuilder(setterPrefix = "with", toBuilder = true)
 public class VersionTreeId {
 
     private final String value;

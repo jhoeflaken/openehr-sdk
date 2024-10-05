@@ -1,7 +1,11 @@
 package nl.athena.openehr.base.base_types.identification;
 
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 
+@Getter
+@SuperBuilder(setterPrefix = "with", toBuilder = true)
 public class ObjectVersionId extends UidBasedId {
 
 

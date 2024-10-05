@@ -79,7 +79,7 @@ public class DefaultEhrService implements EhrService {
         } else {
             // Validate the EHR status.
             check(theStatus);
-            checkNoEhrExistsForParty(theEhrId, theStatus);
+            checkEhrExistsForParty(theEhrId, theStatus);
         }
 
         // The server always sets its own UUID for the EHR status, whether it is provided or not.
@@ -95,10 +95,14 @@ public class DefaultEhrService implements EhrService {
     public EhrResult updateStatus(
             @Nonnull Uuid theEhrId,
             @Nonnull EhrStatusDto theStatus,
-            @Nonnull ObjectVersionId theTargetObjectId,
+            @Nonnull ObjectVersionId theIfMatch,
             @Nonnull Uuid theContributionId,
             @Nonnull Uuid theAuditId) {
-        return null;
+        check(theStatus);
+        checkEhrExistsForParty(theEhrId, theStatus);
+
+        Uuid ehrStatusId = Uuid.builder().withValue(theIfMatch.getValue()).build();
+        int version = Integer.parseInt(theIfMatch.versionTreeId().getValue());
     }
 
     @Override
@@ -190,7 +194,7 @@ public class DefaultEhrService implements EhrService {
      * @param theEhrId  The EHR id to check for.
      * @param theStatus The EHR status to check.
      */
-    private void checkNoEhrExistsForParty(
+    private void checkEhrExistsForParty(
             Uuid theEhrId,
             @Nullable EhrStatusDto theStatus) {
         Optional<PartyRef> partyRef = Optional.ofNullable(theStatus)
