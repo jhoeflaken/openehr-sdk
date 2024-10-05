@@ -1,4 +1,4 @@
-package nl.athena.openehr.base.foundation_types.basic_types;
+package nl.athena.openehr.base.foundation_types.primitive_types;
 
 /**
  * A kind of String constrained to obey the syntax of RFC 3986. See
