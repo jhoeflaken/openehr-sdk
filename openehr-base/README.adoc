@@ -1,0 +1,21 @@
+= Athena openEHR ITS-JAVA: Base Model (BASE) Component - 1.2.0
+Jacob Hoeflaken
+:doctype: book
+:toc: left
+:toclevels: 3
+
+== Introduction
+This document describes how the OpenEHR Base Model (BASE) component is implemented in the Athena OpenEHR SDK. See https://specifications.openehr.org/releases/BASE/Release-1.2.0[Base Model (BASE) Component - 1.2.0] for the official specification.
+
+The model consists out of the following packages:
+
+- *Foundation Types*. Specification of assumed, primitive and other foundation types required by all other openEHR specifications. Implemented in the `nl.athena.openehr.base.foundation_types` package.
+- *Base Types*. Specification of basic openEHR and health informatics types used in other openEHR specifications. Implemented in the `nl.athena.openehr.base.base_types` package.
+- *Resource Model*. The Resource specification defines a formal model of authoring and IP meta-data, language translation and annotations that can be used by classes defining any concrete type of authored resource, such as a document, archetype or template. Implemented in the `nl.athena.openehr.base.resource` package.
+
+== Naming conventions
+OpenEHR class names will be transformed into Java _CamelCase_ names. For example, the class `DV_TEXT` will be transformed to `DvText`.
+
+Package names will be transformed into valid Java package names if needed. For example, the package `foundation_types` will _not_ be transformed into `foundationtypes` or `foundation.types`.
+
+
