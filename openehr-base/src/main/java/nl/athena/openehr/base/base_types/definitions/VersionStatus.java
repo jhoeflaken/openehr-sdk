@@ -1,10 +1,13 @@
 package nl.athena.openehr.base.base_types.definitions;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
+import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
+import lombok.Getter;
 
 /**
  * Status of a versioned artefact, as one of a number of possible values: uncontrolled, prerelease, release, build.
@@ -13,6 +16,7 @@ import jakarta.xml.bind.annotation.XmlType;
  */
 @XmlType(name = "VERSION_STATUS")
 @XmlEnum
+@Getter
 public enum VersionStatus {
     /**
      *
@@ -59,7 +63,11 @@ public enum VersionStatus {
     @XmlEnumValue("build")
     BUILD("build", "{0}+{1}");
 
+    @JsonValue
     private final String value;
+
+    @XmlTransient
+    @JsonIgnore
     private final String template;
 
     /**
@@ -78,26 +86,6 @@ public enum VersionStatus {
     @Override
     public String toString() {
         return value;
-    }
-
-    /**
-     * Returns the official OpenEHR value of the enumeration. This is the value that should be used in the JSON and
-     * therefore is annotated with {@link JsonValue}.
-     *
-     * @return The official OpenEHR value of the enumeration.
-     */
-    @JsonValue
-    public String getValue() {
-        return value;
-    }
-
-    /**
-     * Returns the template for the version status.
-     *
-     * @return The template for the version status.
-     */
-    public String getTemplate() {
-        return template;
     }
 
     /**

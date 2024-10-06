@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
+import lombok.Getter;
 
 /**
  * An enumeration of three values that may commonly occur in constraint models.
@@ -17,6 +18,7 @@ import jakarta.xml.bind.annotation.XmlType;
  */
 @XmlType(name = "VALIDITY_KIND")
 @XmlEnum
+@Getter
 public enum ValidityKind {
     /**
      * Constant to indicate mandatory presence of something.
@@ -36,6 +38,7 @@ public enum ValidityKind {
     @XmlEnumValue("prohibited")
     PROHIBITED("prohibited");
 
+    @JsonValue
     private final String value;
 
     /**
@@ -45,17 +48,6 @@ public enum ValidityKind {
      */
     ValidityKind(@NotNull final String theValue) {
         value = theValue;
-    }
-
-    /**
-     * Returns the official OpenEHR value of the enumeration. This is the value that should be used in the JSON and
-     * therefore is annotated with {@link JsonValue}.
-     *
-     * @return The official OpenEHR value of the enumeration.
-     */
-    @JsonValue
-    public String getValue() {
-        return value;
     }
 
     @Override
