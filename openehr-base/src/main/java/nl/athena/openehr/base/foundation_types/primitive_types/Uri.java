@@ -2,6 +2,7 @@ package nl.athena.openehr.base.foundation_types.primitive_types;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.annotation.Nonnull;
 import jakarta.xml.bind.annotation.XmlValue;
 import lombok.Getter;
@@ -21,7 +22,7 @@ import java.util.regex.Pattern;
 @SuperBuilder(setterPrefix = "with", toBuilder = true)
 public class Uri {
 
-    @JsonProperty("value")
+    @JsonValue
     @XmlValue
     private String value;
 
