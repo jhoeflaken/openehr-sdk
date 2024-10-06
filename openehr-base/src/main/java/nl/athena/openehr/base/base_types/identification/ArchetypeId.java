@@ -1,30 +1,54 @@
 package nl.athena.openehr.base.base_types.identification;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlTransient;
+import jakarta.xml.bind.annotation.XmlType;
+import lombok.Getter;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 
 import java.util.Arrays;
 import java.util.StringJoiner;
 
+@Getter
+@Jacksonized
+@SuperBuilder(setterPrefix = "with", toBuilder = true)
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "ARCHETYPE_ID")
 public class ArchetypeId extends ObjectId {
 
     @JsonIgnore
+    @XmlTransient
     private final String originator;
 
     @JsonIgnore
+    @XmlTransient
     private final String name;
 
     @JsonIgnore
+    @XmlTransient
     private final String entity;
 
     @JsonIgnore
+    @XmlTransient
     private final String concept;
 
     @JsonIgnore
+    @XmlTransient
     private final String[] specialisation;
 
     @JsonIgnore
+    @XmlTransient
     private final String version;
 
+    /**
+     * Constructs a new ArchetypeId with the given value.
+     *
+     * @param theValue The value of the ArchetypeId.
+     */
     public ArchetypeId(final String theValue) {
         super(theValue);
 
@@ -46,6 +70,12 @@ public class ArchetypeId extends ObjectId {
         concept = conceptParts[0];
         specialisation = Arrays.copyOfRange(conceptParts, 1, conceptParts.length);
         version = parts[2];
+    }
+
+    @Override
+    @JsonProperty(value = "_type")
+    public String getType() {
+        return "ARCHETYPE_ID";
     }
 
     public String qualifiedRmEntity() {

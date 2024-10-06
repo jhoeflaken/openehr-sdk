@@ -1,5 +1,9 @@
 package nl.athena.openehr.base.base_types.identification;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlType;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
@@ -15,8 +19,15 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 @Getter
 @SuperBuilder(setterPrefix = "with", toBuilder = true)
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "PARTY_REF")
 public class PartyRef extends ObjectRef {
 
+    /**
+     * Check if the type is valid.
+     *
+     * @return True if the type is valid.
+     */
     public Boolean isValidType() {
         return type.equals("PARTY") ||
                 type.equals("ORGANISATION") ||
@@ -25,6 +36,11 @@ public class PartyRef extends ObjectRef {
                 type.equals("AGENT") ||
                 type.equals("ROLE") ||
                 type.equals("ACTOR");
+    }
+
+    @JsonProperty("_type")
+    public String getType() {
+        return "PARTY_REF";
     }
 
 }

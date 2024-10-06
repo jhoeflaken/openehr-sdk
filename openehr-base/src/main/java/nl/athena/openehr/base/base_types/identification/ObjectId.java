@@ -1,5 +1,10 @@
 package nl.athena.openehr.base.base_types.identification;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlType;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
@@ -15,15 +20,21 @@ import lombok.extern.jackson.Jacksonized;
  * <br/><br/>
  * See <a href="https://specifications.openehr.org/releases/BASE/latest/base_types.html#_object_id_class">ObjectId</a>
  */
-@Jacksonized
 @Getter
 @SuperBuilder(setterPrefix = "with", toBuilder = true)
-public class ObjectId {
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "OBJECT_ID")
+public abstract class ObjectId {
 
+    @JsonProperty(value = "value", required = true)
+    @XmlElement(name = "value", required = true)
     protected String value;
 
     public ObjectId(final String theValue) {
         value = theValue;
     }
+
+    @JsonProperty(value = "_type")
+    public abstract String getType();
 
 }

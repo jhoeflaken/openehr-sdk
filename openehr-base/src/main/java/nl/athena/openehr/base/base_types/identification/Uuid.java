@@ -2,6 +2,8 @@ package nl.athena.openehr.base.base_types.identification;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.annotation.Nonnull;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlType;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
@@ -11,9 +13,17 @@ import nl.athena.openehr.util.i18n.I18n;
 
 import java.util.regex.Pattern;
 
+/**
+ * Model of the DCE Universal Unique Identifier or UUID which takes the form of hexadecimal integers separated by
+ * hyphens, following the pattern 8-4-4-4-12 as defined by the Open Group, CDE 1.1 Remote Procedure Call specification,
+ * Appendix A. Also known as a GUID.
+ * <br/><br/>
+ * See <a href="https://specifications.openehr.org/releases/BASE/latest/base_types.html#_uuid_class">Uuid</a>
+ */
 @Getter
 @Jacksonized
 @SuperBuilder(setterPrefix = "with", toBuilder = true)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "UUID")
 public class Uuid extends Uid {
 
