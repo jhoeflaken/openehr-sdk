@@ -55,7 +55,7 @@ public class DefaultEhrService implements EhrService {
 
         // Generate a new EHR ID if it is not provided.
         if (theEhrId == null) {
-            theEhrId = new Uuid(UUID.randomUUID().toString());
+            theEhrId = Uuid.of(UUID.randomUUID().toString());
         }
 
         // Check if the EHR ID already exists, because it should be unique when creating a new EHR.

@@ -10,7 +10,8 @@ public interface OpenEhrRepository {
             @Nonnull final Uuid theVersionedObjectId,
             @Nonnull final String theSystemId,
             final int theSystemVersion) {
-        return new ObjectVersionId(theVersionedObjectId.toString(), theSystemId, theSystemVersion);
+        return new ObjectVersionId(theVersionedObjectId.toString() + "::" + theSystemId + "::" +
+                theSystemVersion);
     }
 
 }
