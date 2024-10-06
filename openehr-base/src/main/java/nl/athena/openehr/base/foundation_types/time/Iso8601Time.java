@@ -16,7 +16,7 @@ import java.util.regex.Matcher;
  * </ul>
  * See {@link TimeDefinitions#validIso8601Time} for validity.
  */
-public class Iso8601Time extends Iso8601Type {
+public class Iso8601Time extends Iso8601Type implements Comparable<Iso8601Time> {
 
     private final int hours;
     private final int minutes;
@@ -216,7 +216,7 @@ public class Iso8601Time extends Iso8601Type {
 
     @Override
     @SuppressWarnings("NullableProblems")
-    public int compareTo(@NotNull Temporal theOther) {
+    protected int CompareTo(@NotNull Temporal theOther) {
         if (!(theOther instanceof Iso8601Time other)) {
             throw new IllegalArgumentException("Can only compare with another Iso8601Time instance");
         }
@@ -307,4 +307,8 @@ public class Iso8601Time extends Iso8601Type {
                 (int) seconds, fractionalSeconds,  isDecimalSignComma, duration.isNegative());
     }
 
+    @Override
+    public int compareTo(Iso8601Time theOther) {
+        return CompareTo((Temporal) theOther);
+    }
 }

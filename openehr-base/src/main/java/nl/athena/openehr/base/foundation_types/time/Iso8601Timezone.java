@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
  *  See <a href="https://specifications.openehr.org/releases/BASE/development/foundation_types.html#_iso8601_timezone_class">
  *      Iso8601Timezone</a> class.
  */
-public class Iso8601Timezone extends Iso8601Type {
+public class Iso8601Timezone extends Iso8601Type implements Comparable<Iso8601Timezone> {
 
     private static final String ISO_8601_TIMEZONE_REGEX = "^(Z|([+-])(\\d{2})(:?\\d{2})?)$";
     private static final Pattern ISO_8601_TIMEZONE_PATTERN = Pattern.compile(ISO_8601_TIMEZONE_REGEX);
@@ -195,7 +195,7 @@ public class Iso8601Timezone extends Iso8601Type {
 
     @Override
     @SuppressWarnings("NullableProblems")
-    public int compareTo(@NotNull Temporal theOther) {
+    protected int CompareTo(@NotNull Temporal theOther) {
         // Check if the other object is an instance of Iso8601Timezone.
         if (!(theOther instanceof Iso8601Timezone other)) {
             throw new IllegalArgumentException("Cannot compare Iso8601Timezone with " +
@@ -217,5 +217,10 @@ public class Iso8601Timezone extends Iso8601Type {
 
     public long offsetInSeconds() {
         return sign * (hour * 3600 + minute * 60);
+    }
+
+    @Override
+    public int compareTo(Iso8601Timezone theOther) {
+        return CompareTo((Temporal) theOther);
     }
 }

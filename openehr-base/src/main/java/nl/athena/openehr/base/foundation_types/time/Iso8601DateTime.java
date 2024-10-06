@@ -26,7 +26,7 @@ import java.util.regex.Matcher;
  * See <a href="https://specifications.openehr.org/releases/BASE/Release-1.2.0/foundation_types.html#_iso8601_date_time_class">
  *     Iso8601DateTime</a> class.
  */
-public class Iso8601DateTime extends Iso8601Type {
+public class Iso8601DateTime extends Iso8601Type implements Comparable<Iso8601DateTime> {
 
     private final int year;
     private final int month;
@@ -161,7 +161,7 @@ public class Iso8601DateTime extends Iso8601Type {
     }
 
     @Override
-    public int compareTo(Temporal theOther) {
+    protected int CompareTo(Temporal theOther) {
         if (!(theOther instanceof Iso8601DateTime other)) {
             throw new IllegalArgumentException("Can only compare with another Iso8601DateTime instance");
         }
@@ -287,4 +287,8 @@ public class Iso8601DateTime extends Iso8601Type {
         return sb.toString();
     }
 
+    @Override
+    public int compareTo(Iso8601DateTime theOther) {
+        return CompareTo((Temporal) theOther);
+    }
 }

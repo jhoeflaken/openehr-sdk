@@ -1,6 +1,14 @@
 package nl.athena.openehr.base.foundation_types.interval;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
+import jakarta.xml.bind.annotation.*;
+import lombok.Getter;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
+import nl.athena.openehr.base.Messages;
+import nl.athena.openehr.util.i18n.I18n;
 
 /**
  * Interval abstraction, featuring upper and lower limits that may be open or closed, included or not included.
@@ -9,13 +17,36 @@ import jakarta.validation.constraints.NotNull;
  *
  * @param <T> The type of the interval.
  */
-public abstract class Interval<T extends Comparable<T>> {
+@Getter
+@SuperBuilder(setterPrefix = "with", toBuilder = true)
+@Jacksonized
+@XmlAccessorType(XmlAccessType.FIELD)
+public class Interval<T extends Comparable<T>> {
 
+    @Nullable
+    @JsonProperty("lower")
+    @XmlElement(name = "lower")
     protected T lower;
+
+    @Nullable
+    @JsonProperty("upper")
+    @XmlElement(name = "upper")
     protected T upper;
+
+    @JsonProperty(value = "lower_included", required = true)
+    @XmlAttribute(name = "lower_included")
     protected boolean lowerIncluded;
+
+    @JsonProperty(value = "upper_included", required = true)
+    @XmlAttribute(name = "upper_included")
     protected boolean upperIncluded;
+
+    @JsonProperty(value = "lower_unbounded", required = true)
+    @XmlAttribute(name = "lower_unbounded", required = true)
     protected boolean lowerUnbounded;
+
+    @JsonProperty(value = "upper_unbounded", required = true)
+    @XmlAttribute(name = "upper_unbounded", required = true)
     protected boolean upperUnbounded;
 
     /**
@@ -27,8 +58,8 @@ public abstract class Interval<T extends Comparable<T>> {
      * @param theUpperIncluded True if the upper limit is included.
      */
     public Interval(
-            final T theLower,
-            final T theUpper,
+            @Nullable final T theLower,
+            @Nullable final T theUpper,
             final boolean theLowerIncluded,
             final boolean theUpperIncluded) {
         lower = theLower;
@@ -38,8 +69,9 @@ public abstract class Interval<T extends Comparable<T>> {
         lowerUnbounded = theLower == null;
         upperUnbounded = theUpper == null;
 
+        // Check if the interval is valid.
         if (lower != null && upper != null && lower.compareTo(upper) > 0) {
-            throw new IllegalArgumentException("Lower limit must be less than or equal to upper limit");
+            throw new IllegalArgumentException(I18n.getMessage(Messages.INVALID_INTERVAL));
         }
     }
 
@@ -51,9 +83,8 @@ public abstract class Interval<T extends Comparable<T>> {
      * @return True if the value is contained in this Interval.
      */
     public boolean has(@NotNull final T theValue) {
-        boolean lowerCheck = lowerUnbounded || (lowerIncluded ? theValue.compareTo(lower) >= 0 : theValue.compareTo(lower) > 0);
-
-        boolean upperCheck = upperUnbounded || (upperIncluded ? theValue.compareTo(upper) <= 0 : theValue.compareTo(upper) < 0);
+        boolean lowerCheck = lower == null || (lowerIncluded ? theValue.compareTo(lower) >= 0 : theValue.compareTo(lower) > 0);
+        boolean upperCheck = upper == null || (upperIncluded ? theValue.compareTo(upper) <= 0 : theValue.compareTo(upper) < 0);
         return lowerCheck && upperCheck;
     }
 
@@ -65,10 +96,10 @@ public abstract class Interval<T extends Comparable<T>> {
      * @return True if the Interval is contained in this Interval.
      */
     public boolean intersects(@NotNull final Interval<T> theInterval) {
-        boolean lowerOverlap = (lowerUnbounded || theInterval.upperUnbounded ||
-                (theInterval.upperIncluded ? theInterval.upper.compareTo(lower) >= 0 : theInterval.upper.compareTo(lower) > 0));
+        boolean lowerOverlap = (lower == null || theInterval.upper == null ||
+                (theInterval.upperIncluded  ? theInterval.upper.compareTo(lower) >= 0 : theInterval.upper.compareTo(lower) > 0));
 
-        boolean upperOverlap = (upperUnbounded || theInterval.lowerUnbounded ||
+        boolean upperOverlap = (upper == null || theInterval.lower == null ||
                 (theInterval.lowerIncluded ? theInterval.lower.compareTo(upper) <= 0 : theInterval.lower.compareTo(upper) < 0));
 
         return lowerOverlap && upperOverlap;
@@ -82,10 +113,10 @@ public abstract class Interval<T extends Comparable<T>> {
      * @return True if the Interval is contained in this Interval.
      */
     public boolean contains(@NotNull final Interval<T> theInterval) {
-        boolean lowerContains = (lowerUnbounded || (!theInterval.lowerUnbounded &&
+        boolean lowerContains = (lower == null || (!(theInterval.lower == null) &&
                 (lowerIncluded ? lower.compareTo(theInterval.lower) <= 0 : lower.compareTo(theInterval.lower) < 0)));
 
-        boolean upperContains = (upperUnbounded || (!theInterval.upperUnbounded &&
+        boolean upperContains = (upper == null || (!(theInterval.upper == null) &&
                 (upperIncluded ? upper.compareTo(theInterval.upper) >= 0 : upper.compareTo(theInterval.upper) > 0)));
 
         return lowerContains && upperContains;
@@ -106,62 +137,13 @@ public abstract class Interval<T extends Comparable<T>> {
                 upperIncluded == that.upperIncluded &&
                 lowerUnbounded == that.lowerUnbounded &&
                 upperUnbounded == that.upperUnbounded &&
-                lower.equals(that.lower) &&
-                upper.equals(that.upper);
+                lower == that.lower &&
+                upper == that.upper;
     }
 
-    /**
-     * Get the lower limit of the interval. Indicates an unbounded lower limit if null.
-     *
-     * @return The lower limit of the interval. Indicates a unbounded lower limit if null.
-     */
-    public T getLower() {
-        return lower;
-    }
-
-    /**
-     * Get the upper limit of the interval. Indicates an unbounded upper limit if null.
-     *
-     * @return The upper limit of the interval. Indicates an unbounded upper limit if null.
-     */
-    public T getUpper() {
-        return upper;
-    }
-
-    /**
-     * Check whether the lower limit is included in the interval.
-     *
-     * @return True if the lower limit is included in the interval.
-     */
-    public boolean isLowerIncluded() {
-        return lowerIncluded;
-    }
-
-    /**
-     * Check whether the upper limit is included in the interval.
-     *
-     * @return True if the upper limit is included in the interval.
-     */
-    public boolean isUpperIncluded() {
-        return upperIncluded;
-    }
-
-    /**
-     * Check whether the lower limit is unbounded.
-     *
-     * @return True if the lower limit is unbounded.
-     */
-    public boolean isLowerUnbounded() {
-        return lowerUnbounded;
-    }
-
-    /**
-     * Check whether the upper limit is unbounded.
-     *
-     * @return True if the upper limit is unbounded.
-     */
-    public boolean isUpperUnbounded() {
-        return upperUnbounded;
+    @JsonProperty("_type")
+    public String getType() {
+        return "INTERVAL";
     }
 
 }

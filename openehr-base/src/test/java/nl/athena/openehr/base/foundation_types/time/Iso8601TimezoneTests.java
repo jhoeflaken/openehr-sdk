@@ -79,11 +79,11 @@ public class Iso8601TimezoneTests {
     @Test
     void compareToNonIso8601TimezoneThrowsException() {
         Iso8601Timezone timezone = Iso8601Timezone.of("+0200");
-        assertThrows(IllegalArgumentException.class, () -> timezone.compareTo(new Temporal() {
+        assertThrows(IllegalArgumentException.class, () -> timezone.CompareTo(new Temporal() {
 
             @Override
             @SuppressWarnings("NullableProblems")
-            public int compareTo(Temporal o) {
+            public int CompareTo(Temporal o) {
                 return 0;
             }
 

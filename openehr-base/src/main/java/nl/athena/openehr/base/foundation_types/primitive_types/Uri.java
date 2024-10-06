@@ -9,6 +9,7 @@ import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlValue;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 import nl.athena.openehr.base.Messages;
 import nl.athena.openehr.util.i18n.I18n;
 
@@ -22,6 +23,7 @@ import java.util.regex.Pattern;
  */
 @Getter
 @SuperBuilder(setterPrefix = "with", toBuilder = true)
+@Jacksonized
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Uri {
 

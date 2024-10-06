@@ -16,7 +16,7 @@ import java.util.regex.Matcher;
  * </ul>
  * See {@link TimeDefinitions#validIso8601Date} for validity.
  */
-public class Iso8601Date extends Iso8601Type {
+public class Iso8601Date extends Iso8601Type implements Comparable<Iso8601Date> {
 
     private final int year;
     private final int month;
@@ -270,8 +270,7 @@ public class Iso8601Date extends Iso8601Type {
 
 
     @Override
-    @SuppressWarnings("NullableProblems")
-    public int compareTo(@NotNull Temporal theObject) {
+    protected int CompareTo(@NotNull Temporal theObject) {
         if (!(theObject instanceof Iso8601Date other)) {
             throw new IllegalArgumentException("Cannot compare Iso8601Date with " + theObject.getClass().getSimpleName());
         }
@@ -291,4 +290,8 @@ public class Iso8601Date extends Iso8601Type {
         return 0;
     }
 
+    @Override
+    public int compareTo(@NotNull Iso8601Date theOther) {
+        return CompareTo((Temporal) theOther);
+    }
 }

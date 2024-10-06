@@ -12,7 +12,7 @@ import java.util.regex.Matcher;
  * <a href="https://specifications.openehr.org/releases/BASE/Release-1.2.0/foundation_types.html#_iso8601_duration_class">
  * Iso8601Duration</a> class.
  */
-public class Iso8601Duration extends Iso8601Type {
+public class Iso8601Duration extends Iso8601Type implements Comparable<Iso8601Duration> {
 
     private final int years;
     private final int months;
@@ -292,7 +292,7 @@ public class Iso8601Duration extends Iso8601Type {
 
     @Override
     @SuppressWarnings("NullableProblems")
-    public int compareTo(@NotNull Temporal theOther) {
+    protected int CompareTo(@NotNull Temporal theOther) {
         if (!(theOther instanceof Iso8601Duration other)) {
             throw new IllegalArgumentException("Cannot compare Iso8601Duration with " + theOther.getClass().getSimpleName());
         }
@@ -365,5 +365,10 @@ public class Iso8601Duration extends Iso8601Type {
 
     public TemporalAmount toDuration() {
         return Duration.ofSeconds((long) totalDurationInSeconds);
+    }
+
+    @Override
+    public int compareTo(Iso8601Duration theOther) {
+        return CompareTo((Temporal) theOther);
     }
 }

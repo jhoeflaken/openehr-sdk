@@ -1,6 +1,10 @@
 package nl.athena.openehr.base.foundation_types.interval;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlType;
+import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 
 /**
  * Express constraints on the cardinality of container objects which are the values of multiply-valued attributes,
@@ -8,10 +12,18 @@ import jakarta.validation.constraints.NotNull;
  * bag. See <a href="https://specifications.openehr.org/releases/BASE/development/foundation_types.html#_cardinality_class">
  *     Cardinality</a> class.
  */
+@Getter
+@SuperBuilder(setterPrefix = "with", toBuilder = true)
+@XmlType(name = "CARDINALITY")
 public class Cardinality {
 
+    @XmlElement(name = "interval", required = true)
     private final MultiplicityInterval interval;
+
+    @XmlElement(name = "is_ordered", required = true)
     private final boolean isOrdered;
+
+    @XmlElement(name = "is_unique", required = true)
     private final boolean isUnique;
 
     /**
