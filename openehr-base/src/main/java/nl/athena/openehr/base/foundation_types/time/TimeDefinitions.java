@@ -47,35 +47,92 @@ public interface TimeDefinitions {
     float NOMINAL_DAYS_IN_MONTH = AVERAGE_DAYS_IN_MONTH;
     float NOMINAL_DAYS_IN_YEAR = AVERAGE_DAYS_IN_YEAR;
 
-    default boolean validYear(int theYear) {
+    /**
+     * Check if the year is valid.
+     *
+     * @param theYear The year to check.
+     * @return True if the year is valid, false otherwise.
+     */
+    default boolean validYear(final int theYear) {
         return theYear >= 0;
     }
 
-    default boolean validMonth(int theMonth) {
+    /**
+     * Check if the month is valid.
+     *
+     * @param theMonth The month to check.
+     * @return True if the month is valid, false otherwise.
+     */
+    default boolean validMonth(final int theMonth) {
         return theMonth >= 1 && theMonth <= MONTHS_IN_YEAR;
     }
 
-    default boolean validDay(int theYear, int theMonth, int theDay) {
+    /**
+     * Check if the day is valid.
+     * @param theYear The year the day is in.
+     * @param theMonth The month the day is in.
+     * @param theDay The day to check.
+     * @return True if the day is valid, false otherwise.
+     */
+    default boolean validDay(
+            final int theYear,
+            final int theMonth,
+            final int theDay) {
         final int daysInMonth = YearMonth.of(theYear, theMonth).lengthOfMonth();
         return theDay >= 1 && theDay <= daysInMonth;
     }
 
-    default boolean validHour(int theHour, int theMinute, int theSecond) {
+    /**
+     * Check if the hour is valid.
+     *
+     * @param theHour The hour to check.
+     * @param theMinute The minute to check.
+     * @param theSecond The second to check.
+     * @return True if the hour is valid, false otherwise.
+     */
+    default boolean validHour(
+            final int theHour,
+            final int theMinute,
+            final int theSecond) {
         return (theHour >= 0 && theHour < HOURS_IN_DAY) || (theHour == HOURS_IN_DAY && theMinute == 0 && theSecond == 0);
     }
 
-    default boolean validMinute(int theMinute) {
+    /**
+     * Check if the minute is valid.
+     *
+     * @param theMinute The minute to check.
+     * @return True if the minute is valid, false otherwise.
+     */
+    default boolean validMinute(final int theMinute) {
         return theMinute >= 0 && theMinute < MINUTES_IN_HOUR;
     }
 
-    default boolean validSecond(int theSecond) {
+    /**
+     * Check if the second is valid.
+     *
+     * @param theSecond The second to check.
+     * @return True if the second is valid, false otherwise.
+     */
+    default boolean validSecond(final int theSecond) {
         return theSecond >= 0 && theSecond < SECONDS_IN_MINUTE;
     }
 
-    default boolean validFractionalSecond(float theFractionalSecond) {
+    /**
+     * Check if the fractional second is valid.
+     *
+     * @param theFractionalSecond The fractional second to check.
+     * @return True if the fractional second is valid, false otherwise.
+     */
+    default boolean validFractionalSecond(final float theFractionalSecond) {
         return theFractionalSecond >= 0.0 && theFractionalSecond < 1.0;
     }
 
+    /**
+     * Check if the date is valid.
+     *
+     * @param theIso8601Date The date to check.
+     * @return True if the date is valid, false otherwise.
+     */
     default boolean validIso8601Date(final String theIso8601Date) {
         final Matcher matcher = ISO_8601_DATE_PATTERN.matcher(theIso8601Date);
         if (!matcher.matches()) {
@@ -95,10 +152,22 @@ public interface TimeDefinitions {
         return true;
     }
 
+    /**
+     * Check if the time is valid.
+     *
+     * @param theIso8601Time The time to check.
+     * @return True if the time is valid, false otherwise.
+     */
     default boolean validIso8601Time(final String theIso8601Time) {
         return ISO_8601_TIME_PATTERN.matcher(theIso8601Time).matches();
     }
 
+    /**
+     * Check if the date-time is valid.
+     *
+     * @param theIso8601DateTime The date-time to check.
+     * @return True if the date-time is valid, false otherwise.
+     */
     default boolean validIso8601DateTime(final String theIso8601DateTime) {
         final Matcher matcher = ISO_8601_DATE_TIME_PATTERN.matcher(theIso8601DateTime);
         if (!matcher.matches()) {
@@ -118,6 +187,12 @@ public interface TimeDefinitions {
         return true;
     }
 
+    /**
+     * Check if the duration is valid.
+     *
+     * @param theIso8601Duration The duration to check.
+     * @return True if the duration is valid, false otherwise.
+     */
     default boolean validIso8601Duration(final String theIso8601Duration) {
         return ISO_8601_DURATION_PATTERN.matcher(theIso8601Duration).matches();
     }

@@ -1,6 +1,15 @@
 package nl.athena.openehr.base.foundation_types.time;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.NotNull;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlTransient;
+import jakarta.xml.bind.annotation.XmlType;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -16,11 +25,26 @@ import java.util.regex.Matcher;
  * </ul>
  * See {@link TimeDefinitions#validIso8601Date} for validity.
  */
+@SuperBuilder(setterPrefix = "with", toBuilder = true)
+@Jacksonized
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "Iso8601Date")
 public class Iso8601Date extends Iso8601Type implements Comparable<Iso8601Date> {
 
+    @JsonIgnore
+    @XmlTransient
     private final int year;
+
+    @JsonIgnore
+    @XmlTransient
     private final int month;
+
+    @JsonIgnore
+    @XmlTransient
     private final int day;
+
+    @JsonIgnore
+    @XmlTransient
     private final Iso8601Timezone timezone;
 
     /**
@@ -270,7 +294,7 @@ public class Iso8601Date extends Iso8601Type implements Comparable<Iso8601Date> 
 
 
     @Override
-    protected int CompareTo(@NotNull Temporal theObject) {
+    protected int compareTo(@Nonnull Temporal theObject) {
         if (!(theObject instanceof Iso8601Date other)) {
             throw new IllegalArgumentException("Cannot compare Iso8601Date with " + theObject.getClass().getSimpleName());
         }
@@ -291,7 +315,13 @@ public class Iso8601Date extends Iso8601Type implements Comparable<Iso8601Date> 
     }
 
     @Override
-    public int compareTo(@NotNull Iso8601Date theOther) {
-        return CompareTo((Temporal) theOther);
+    public int compareTo(@Nonnull Iso8601Date theOther) {
+        return compareTo((Temporal) theOther);
     }
+
+    @JsonProperty("_type")
+    private String getType() {
+        return "DATE";
+    }
+
 }

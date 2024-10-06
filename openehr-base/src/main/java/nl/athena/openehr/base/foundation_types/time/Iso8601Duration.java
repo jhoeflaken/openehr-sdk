@@ -1,6 +1,15 @@
 package nl.athena.openehr.base.foundation_types.time;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.NotNull;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlTransient;
+import jakarta.xml.bind.annotation.XmlType;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 
 import java.time.Duration;
 import java.time.temporal.TemporalAmount;
@@ -12,18 +21,54 @@ import java.util.regex.Matcher;
  * <a href="https://specifications.openehr.org/releases/BASE/Release-1.2.0/foundation_types.html#_iso8601_duration_class">
  * Iso8601Duration</a> class.
  */
+@SuperBuilder(setterPrefix = "with", toBuilder = true)
+@Jacksonized
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "Iso8601Duration")
 public class Iso8601Duration extends Iso8601Type implements Comparable<Iso8601Duration> {
 
+    @JsonIgnore
+    @XmlTransient
     private final int years;
+
+    @JsonIgnore
+    @XmlTransient
     private final int months;
+
+    @JsonIgnore
+    @XmlTransient
     private final int weeks;
+
+    @JsonIgnore
+    @XmlTransient
     private final int days;
+
+    @JsonIgnore
+    @XmlTransient
     private final int hours;
+
+    @JsonIgnore
+    @XmlTransient
     private final int minutes;
+
+    @JsonIgnore
+    @XmlTransient
     private final int seconds;
+
+    @JsonIgnore
+    @XmlTransient
     private final float fractionalSeconds;
+
+    @JsonIgnore
+    @XmlTransient
     private final boolean isDecimalSignComma;
+
+    @JsonIgnore
+    @XmlTransient
     private final boolean isNegative;
+
+    @JsonIgnore
+    @XmlTransient
     private final float totalDurationInSeconds;
 
     /**
@@ -291,8 +336,7 @@ public class Iso8601Duration extends Iso8601Type implements Comparable<Iso8601Du
     }
 
     @Override
-    @SuppressWarnings("NullableProblems")
-    protected int CompareTo(@NotNull Temporal theOther) {
+    protected int compareTo(@Nonnull Temporal theOther) {
         if (!(theOther instanceof Iso8601Duration other)) {
             throw new IllegalArgumentException("Cannot compare Iso8601Duration with " + theOther.getClass().getSimpleName());
         }
@@ -368,7 +412,13 @@ public class Iso8601Duration extends Iso8601Type implements Comparable<Iso8601Du
     }
 
     @Override
-    public int compareTo(Iso8601Duration theOther) {
-        return CompareTo((Temporal) theOther);
+    public int compareTo(@Nonnull Iso8601Duration theOther) {
+        return compareTo((Temporal) theOther);
     }
+
+    @JsonProperty("_type")
+    public String getType() {
+        return "DURATION";
+    }
+
 }

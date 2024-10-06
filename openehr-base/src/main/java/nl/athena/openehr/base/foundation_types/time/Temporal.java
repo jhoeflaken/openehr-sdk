@@ -1,5 +1,7 @@
 package nl.athena.openehr.base.foundation_types.time;
 
+import jakarta.annotation.Nonnull;
+
 /**
  * Temporal abstraction, representing a point in time. See
  * <a href="https://specifications.openehr.org/releases/BASE/development/foundation_types.html#_temporal_class">
@@ -7,7 +9,7 @@ package nl.athena.openehr.base.foundation_types.time;
  */
 public abstract class Temporal {
 
-    protected abstract int CompareTo(final Temporal theOther);
+    protected abstract int compareTo(@Nonnull final Temporal theOther);
 
     /**
      * Arithmetic value comparison. Returns True if current object is less than the other. This operator is effected
@@ -18,7 +20,7 @@ public abstract class Temporal {
      * @return True if current object is less than the other.
      */
     public boolean lessThan(final Temporal theOther) {
-        return CompareTo(theOther) < 0;
+        return compareTo(theOther) < 0;
     }
 
     /**
@@ -28,7 +30,7 @@ public abstract class Temporal {
      * @return True if current object greater than the other.
      */
     public boolean greaterThan(final Temporal theOther) {
-        return CompareTo(theOther) > 0;
+        return compareTo(theOther) > 0;
     }
 
     /**
@@ -38,7 +40,7 @@ public abstract class Temporal {
      * @return True if current object less than or equal to the other.
      */
     public boolean lessOrEqual(final Temporal theOther) {
-        return CompareTo(theOther) <= 0;
+        return compareTo(theOther) <= 0;
     }
 
     /**
@@ -48,7 +50,7 @@ public abstract class Temporal {
      * @return True if current object greater than or equal to the other.
      */
     public boolean greaterOrEqual(final Temporal theOther) {
-        return CompareTo(theOther) >= 0;
+        return compareTo(theOther) >= 0;
     }
 
     /**
@@ -67,7 +69,7 @@ public abstract class Temporal {
             return false;
         }
 
-        return CompareTo((Temporal) theOther) == 0;
+        return compareTo((Temporal) theOther) == 0;
     }
 
 }

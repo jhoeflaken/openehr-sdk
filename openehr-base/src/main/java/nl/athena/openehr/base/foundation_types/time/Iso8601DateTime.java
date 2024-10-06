@@ -1,5 +1,15 @@
 package nl.athena.openehr.base.foundation_types.time;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.annotation.Nonnull;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlTransient;
+import jakarta.xml.bind.annotation.XmlType;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
+
 import java.time.*;
 import java.util.regex.Matcher;
 
@@ -26,15 +36,42 @@ import java.util.regex.Matcher;
  * See <a href="https://specifications.openehr.org/releases/BASE/Release-1.2.0/foundation_types.html#_iso8601_date_time_class">
  *     Iso8601DateTime</a> class.
  */
+@SuperBuilder(setterPrefix = "with", toBuilder = true)
+@Jacksonized
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "Iso8601DateTime")
 public class Iso8601DateTime extends Iso8601Type implements Comparable<Iso8601DateTime> {
 
+    @JsonIgnore
+    @XmlTransient
     private final int year;
+
+    @JsonIgnore
+    @XmlTransient
     private final int month;
+
+    @JsonIgnore
+    @XmlTransient
     private final int day;
+
+    @JsonIgnore
+    @XmlTransient
     private final int hour;
+
+    @JsonIgnore
+    @XmlTransient
     private final int minute;
+
+    @JsonIgnore
+    @XmlTransient
     private final int second;
+
+    @JsonIgnore
+    @XmlTransient
     private final float fractionalSecond;
+
+    @JsonIgnore
+    @XmlTransient
     private final Iso8601Timezone timezone;
 
     public static Iso8601DateTime of(String theValue) {
@@ -161,7 +198,7 @@ public class Iso8601DateTime extends Iso8601Type implements Comparable<Iso8601Da
     }
 
     @Override
-    protected int CompareTo(Temporal theOther) {
+    protected int compareTo(@Nonnull Temporal theOther) {
         if (!(theOther instanceof Iso8601DateTime other)) {
             throw new IllegalArgumentException("Can only compare with another Iso8601DateTime instance");
         }
@@ -288,7 +325,13 @@ public class Iso8601DateTime extends Iso8601Type implements Comparable<Iso8601Da
     }
 
     @Override
-    public int compareTo(Iso8601DateTime theOther) {
-        return CompareTo((Temporal) theOther);
+    public int compareTo(@Nonnull Iso8601DateTime theOther) {
+        return compareTo((Temporal) theOther);
     }
+
+    @JsonProperty("_type")
+    public String getType() {
+        return "DATE_TIME";
+    }
+
 }

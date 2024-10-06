@@ -1,5 +1,6 @@
 package nl.athena.openehr.base.foundation_types.time;
 
+import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.regex.Matcher;
@@ -194,8 +195,7 @@ public class Iso8601Timezone extends Iso8601Type implements Comparable<Iso8601Ti
     }
 
     @Override
-    @SuppressWarnings("NullableProblems")
-    protected int CompareTo(@NotNull Temporal theOther) {
+    protected int compareTo(@Nonnull Temporal theOther) {
         // Check if the other object is an instance of Iso8601Timezone.
         if (!(theOther instanceof Iso8601Timezone other)) {
             throw new IllegalArgumentException("Cannot compare Iso8601Timezone with " +
@@ -216,11 +216,11 @@ public class Iso8601Timezone extends Iso8601Type implements Comparable<Iso8601Ti
     }
 
     public long offsetInSeconds() {
-        return sign * (hour * 3600 + minute * 60);
+        return sign * (hour * 3600L + minute * 60L);
     }
 
     @Override
-    public int compareTo(Iso8601Timezone theOther) {
-        return CompareTo((Temporal) theOther);
+    public int compareTo(@Nonnull Iso8601Timezone theOther) {
+        return compareTo((Temporal) theOther);
     }
 }

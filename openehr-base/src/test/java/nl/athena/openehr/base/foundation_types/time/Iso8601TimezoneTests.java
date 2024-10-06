@@ -1,5 +1,6 @@
 package nl.athena.openehr.base.foundation_types.time;
 
+import jakarta.annotation.Nonnull;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -79,11 +80,11 @@ public class Iso8601TimezoneTests {
     @Test
     void compareToNonIso8601TimezoneThrowsException() {
         Iso8601Timezone timezone = Iso8601Timezone.of("+0200");
-        assertThrows(IllegalArgumentException.class, () -> timezone.CompareTo(new Temporal() {
+        assertThrows(IllegalArgumentException.class, () -> timezone.compareTo(new Temporal() {
 
             @Override
             @SuppressWarnings("NullableProblems")
-            public int CompareTo(Temporal o) {
+            public int compareTo(@Nonnull Temporal o) {
                 return 0;
             }
 

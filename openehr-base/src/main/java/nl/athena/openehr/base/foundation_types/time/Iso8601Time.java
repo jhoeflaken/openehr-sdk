@@ -1,7 +1,16 @@
 package nl.athena.openehr.base.foundation_types.time;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlTransient;
+import jakarta.xml.bind.annotation.XmlType;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 
 import java.time.Duration;
 import java.time.LocalTime;
@@ -16,18 +25,54 @@ import java.util.regex.Matcher;
  * </ul>
  * See {@link TimeDefinitions#validIso8601Time} for validity.
  */
+@SuperBuilder(setterPrefix = "with", toBuilder = true)
+@Jacksonized
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "Iso8601Time")
 public class Iso8601Time extends Iso8601Type implements Comparable<Iso8601Time> {
 
+    @JsonIgnore
+    @XmlTransient
     private final int hours;
+
+    @JsonIgnore
+    @XmlTransient
     private final int minutes;
+
+    @JsonIgnore
+    @XmlTransient
     private final int seconds;
+
+    @JsonIgnore
+    @XmlTransient
     private final float fractionalSeconds;
+
+    @JsonIgnore
+    @XmlTransient
     private final Iso8601Timezone timezone;
+
+    @JsonIgnore
+    @XmlTransient
     private final boolean minuteUnknown;
+
+    @JsonIgnore
+    @XmlTransient
     private final boolean secondUnknown;
+
+    @JsonIgnore
+    @XmlTransient
     private final boolean isDecimalSignComma;
+
+    @JsonIgnore
+    @XmlTransient
     private final boolean hasFractionalSeconds;
+
+    @JsonIgnore
+    @XmlTransient
     private final boolean isPartial;
+
+    @JsonIgnore
+    @XmlTransient
     private final boolean isExtended;
 
     /**
@@ -215,8 +260,7 @@ public class Iso8601Time extends Iso8601Type implements Comparable<Iso8601Time> 
     }
 
     @Override
-    @SuppressWarnings("NullableProblems")
-    protected int CompareTo(@NotNull Temporal theOther) {
+    protected int compareTo(@Nonnull Temporal theOther) {
         if (!(theOther instanceof Iso8601Time other)) {
             throw new IllegalArgumentException("Can only compare with another Iso8601Time instance");
         }
@@ -308,7 +352,12 @@ public class Iso8601Time extends Iso8601Type implements Comparable<Iso8601Time> 
     }
 
     @Override
-    public int compareTo(Iso8601Time theOther) {
-        return CompareTo((Temporal) theOther);
+    public int compareTo(@Nonnull Iso8601Time theOther) {
+        return compareTo((Temporal) theOther);
+    }
+
+    @JsonProperty("_type")
+    public String getType() {
+        return "TIME";
     }
 }

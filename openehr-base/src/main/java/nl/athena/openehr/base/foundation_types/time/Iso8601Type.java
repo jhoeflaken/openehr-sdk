@@ -1,12 +1,21 @@
 package nl.athena.openehr.base.foundation_types.time;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+import jakarta.xml.bind.annotation.XmlValue;
+import lombok.Getter;
+import lombok.experimental.SuperBuilder;
+
 /**
  * Abstract ancestor type of ISO 8601 types, defining interface for 'extended' and 'partial' concepts from ISO 8601.
  * See <a href="https://specifications.openehr.org/releases/BASE/development/foundation_types.html#_iso8601type_class">
  *     Iso8601Type</a> class.
  */
+@Getter
+@SuperBuilder(setterPrefix = "with", toBuilder = true)
 public abstract class Iso8601Type extends Temporal implements TimeDefinitions {
 
+    @JsonValue
+    @XmlValue
     private final String value;
 
     /**
@@ -16,15 +25,6 @@ public abstract class Iso8601Type extends Temporal implements TimeDefinitions {
      */
     public Iso8601Type(final String theValue) {
         value = theValue;
-    }
-
-    /**
-     * Get the ISO8601 value.
-     *
-     * @return The ISO8601 value.
-     */
-    public String getValue() {
-        return value;
     }
 
     /**
