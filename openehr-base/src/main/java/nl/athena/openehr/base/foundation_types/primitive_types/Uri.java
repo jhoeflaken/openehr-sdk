@@ -1,9 +1,11 @@
 package nl.athena.openehr.base.foundation_types.primitive_types;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.annotation.Nonnull;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlValue;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
@@ -20,6 +22,7 @@ import java.util.regex.Pattern;
  */
 @Getter
 @SuperBuilder(setterPrefix = "with", toBuilder = true)
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Uri {
 
     @JsonValue
@@ -27,27 +30,35 @@ public class Uri {
     private String value;
 
     @JsonIgnore
+    @XmlTransient
     private String scheme;
 
     @JsonIgnore
+    @XmlTransient
     private String user;
 
     @JsonIgnore
+    @XmlTransient
     private String password;
 
     @JsonIgnore
+    @XmlTransient
     private String host;
 
     @JsonIgnore
+    @XmlTransient
     private String port;
 
     @JsonIgnore
+    @XmlTransient
     private String path;
 
     @JsonIgnore
+    @XmlTransient
     private String query;
 
     @JsonIgnore
+    @XmlTransient
     private String fragment;
 
     /**
