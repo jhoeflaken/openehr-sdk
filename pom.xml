@@ -35,5 +35,6 @@
         <module>openehr-bmm</module>
         <module>openehr-its-core</module>
         <module>openehr-util</module>
+        <module>openehr-jooq-postgres</module>
     </modules>
 </project>

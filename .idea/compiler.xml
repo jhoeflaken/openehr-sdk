@@ -2,6 +2,7 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
@@ -19,6 +20,7 @@
         <module name="openehr-term" />
         <module name="openehr-base" />
         <module name="openehr-lang" />
+        <module name="openehr-jooq-postgres" />
         <module name="openehr-cds" />
       </profile>
     </annotationProcessing>

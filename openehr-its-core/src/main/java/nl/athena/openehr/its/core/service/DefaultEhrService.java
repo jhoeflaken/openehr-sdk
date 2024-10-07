@@ -101,7 +101,7 @@ public class DefaultEhrService implements EhrService {
         check(theStatus);
         checkEhrExistsForParty(theEhrId, theStatus);
 
-        Uuid ehrStatusId = Uuid.builder().withValue(theIfMatch.getValue()).build();
+        Uuid ehrStatusId = Uuid.of(theIfMatch.getValue());
         int version = Integer.parseInt(theIfMatch.versionTreeId().getValue());
     }
 
