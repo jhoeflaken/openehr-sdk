@@ -162,7 +162,7 @@ alter table "comp_version" owner to "openehr-admin";
 create index idx_comp_version_ehr on comp_version (ehr_id, template_id) include (vo_id, sys_version);
 create index idx_comp_version_root_concept on comp_version (ehr_id, root_concept) include (vo_id, sys_version);
 create index idx_comp_version_sys_period_lower_idx on comp_version (sys_period_lower desc, vo_id asc);
-grant delete, insert, select, update on comp_version to " openehr-user";
+grant delete, insert, select, update on comp_version to "openehr-user";
 
 
 /**
@@ -187,7 +187,7 @@ create table comp_data
 );
 
 comment on table comp_data is 'Stores the data of the compositions';
-alter table comp_data owner to " openehr-admin";
+alter table comp_data owner to "openehr-admin";
 create index idx_comp_data_leaf on comp_data (vo_id, entity_idx collate "C");
 create index idx_comp_data_path on comp_data (vo_id, parent_num, entity_attribute, entity_concept, rm_entity, num, num_cap);
 grant delete, insert, select, update on comp_data to "openehr-user";
@@ -217,7 +217,6 @@ create table comp_version_history
 comment on table comp_version_history is 'Stores the history of the composition versions';
 alter table comp_version_history owner to "openehr-admin";
 grant delete, insert, select, update on comp_version_history to "openehr-user";
-
 
 /**
  * The composition data history table is used to store the history of the composition data.
@@ -288,7 +287,7 @@ create table ehr_status_data
     num_cap          integer not null,
     constraint pk_ehr_status primary key (ehr_id, num),
     constraint fk_ehr_status_data_ehr foreign key (ehr_id) references ehr(id),
-    constraint fk_ehr_status_data_ehr_status_version foreign key (ehr_id) references ehr_status_version(ehr_id) on delete cascade
+    constraint fk_ehr_status_data_ehr_status_version foreign key (ehr_id, num) references ehr_status_version(ehr_id, sys_version) on delete cascade
 );
 
 comment on table ehr_status_data is 'Stores the data of the EHR statuses';
@@ -329,9 +328,7 @@ create table ehr_status_data_history
 (
     vo_id            uuid not null,
     num              integer not null,
-    ehr_id           uuid not null
-        constraint ehr_status_history_ehr_id_fkey
-            references ehr,
+    ehr_id           uuid not null,
     citem_num        integer,
     rm_entity        text not null,
     entity_concept   text,
