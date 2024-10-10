@@ -20,7 +20,7 @@ alter type ehr_item_tag_target_type owner to ehrbase;
  */
 create table "plugin"
 (
-    id        uuid default uuid_generate_v4() not null,
+    id        uuid default ext.uuid_generate_v4() not null,
     plugin_id text not null,
     key       text not null,
     value     text,
