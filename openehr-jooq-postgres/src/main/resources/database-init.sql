@@ -2,7 +2,6 @@ create sequence tenant_id_seq;
 alter sequence tenant_id_seq owner to "openehr-admin";
 grant select on sequence tenant_id_seq to "openehr-user";
 
-
 /**
  * Custom types and enumerations.
  */
