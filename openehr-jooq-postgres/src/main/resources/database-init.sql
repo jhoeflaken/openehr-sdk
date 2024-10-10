@@ -424,6 +424,7 @@ create table ehr_folder_version_history
     constraint fk_ehr_folder_version_history_audit foreign key (audit_id) references audit_details(id)
 );
 
+comment on table ehr_folder_version_history is 'Stores the history of the EHR folder versions';
 alter table ehr_folder_version_history owner to "openehr-admin";
 grant delete, insert, select, update on ehr_folder_version_history to "openehr-user";
 
@@ -452,10 +453,13 @@ create table ehr_folder_data_history
     constraint fk_ehr_folder_data_history_ehr foreign key (ehr_id) references ehr(id)
 );
 
+comment on table ehr_folder_data_history is 'Stores the history of the EHR folder data';
 alter table ehr_folder_data_history owner to "openehr-admin";
 grant delete, insert, select, update on ehr_folder_data_history to "openehr-user";
 
-
+/**
+ * The ehr_item_tag table is used to store the tags of the EHR items.
+ */
 create table ehr_item_tag
 (
     id               uuid not null,
@@ -471,6 +475,7 @@ create table ehr_item_tag
     constraint fk_ehr_item_tag_ehr foreign key (ehr_id) references ehr(id) on delete cascade
 );
 
+comment on table ehr_item_tag is 'Stores the tags of the EHR items';
 alter table ehr_item_tag owner to "openehr-admin";
 create index idx_ehr_item_tag_ehr_id_target_vo_id on ehr_item_tag (ehr_id, target_vo_id);
 grant delete, insert, select, update on ehr_item_tag to "openehr-user";
